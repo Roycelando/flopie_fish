@@ -1,27 +1,55 @@
 const std = @import("std");
 const flopie_fish = @import("flopie_fish");
+const io = std.io;
+
+
+// TODO: Refactor the std.out and std.in to make this code look cleaner [2026_04_06]
+// TODO: Understand how the std.in and std.out actually work [2026_04_06]
+
+pub fn menu() !void{
+    var stdout_buffer:[1024]u8 = undefined;
+    var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+    const stdout = &stdout_writer.interface;
+
+    try stdout.print("\nWelcom to the flopie fish project! A chess engine written in zig by Royce Lando\n",.{});
+    try stdout.print("=====================================\n",.{});
+    try stdout.print("==             Menu                ==\n",.{});
+    try stdout.print("=====================================\n\n",.{});
+    try stdout.print("1. Play manually\n",.{});
+    try stdout.print("2. Play Flopie Fish\n",.{});
+    try stdout.print("*. Exit\n",.{});
+    try stdout.flush();
+
+    try stdout.print("input: ",.{});
+    var user_input:[]u8 = undefined;
+    var stdin_buffer: [256]u8 = undefined;
+    var stdin_reader = std.fs.File.stdin().reader(&stdin_buffer);
+    const stdin = &stdin_reader.interface;
+    user_input = try stdin.takeDelimiterExclusive('\n');
+
+    const choice:u8 = try std.fmt.parseInt(u8, user_input, 10);
+    //var trimmed_choice = std.mem.trim(u8, choice, &std.ascii.whitespace);
+
+    std.debug.print("choice {} its type is {}\n",.{choice, @TypeOf(choice)});
+
+    if(choice == 1){
+        std.debug.print("its equl\n",.{});
+    }
+
+    while(choice != 1 and choice != 2 and choice != 3){
+//      try stdout.print("input: ",.{});
+//      try stdout.flush();
+//      user_input = try stdin.takeDelimiterExclusive('\n');
+//      choice = std.mem.trim(u8, user_input, &std.ascii.whitespace);
+//      trimmed_choice = try std.fmt.parseInt(u8, choice, 10);
+
+   }
+
+}
 
 pub fn main() !void {
-    // Prints to stderr, ignoring potential errors.
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
-    try flopie_fish.bufferedPrint();
-}
-
-test "simple test" {
-    const gpa = std.testing.allocator;
-    var list: std.ArrayList(i32) = .empty;
-    defer list.deinit(gpa); // Try commenting this out and see if zig detects the memory leak!
-    try list.append(gpa, 42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
-}
-
-test "fuzz example" {
-    const Context = struct {
-        fn testOne(context: @This(), input: []const u8) anyerror!void {
-            _ = context;
-            // Try passing `--fuzz` to `zig build test` and see if it manages to fail this test case!
-            try std.testing.expect(!std.mem.eql(u8, "canyoufindme", input));
-        }
+    menu() catch |err|{
+        std.debug.print("{}",.{err});
     };
-    try std.testing.fuzz(Context{}, Context.testOne, .{});
+
 }
