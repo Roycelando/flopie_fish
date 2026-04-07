@@ -78,7 +78,6 @@ zig build run
 
 - [Zig 0.15.2](https://ziglang.org)
 - [Chess Programming Wiki](https://www.chessprogramming.org)
-- Inspired by [BBC Chess Engine](https://github.com/maksimKorzh/bbc)
 
 ---
 
