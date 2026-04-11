@@ -6,7 +6,7 @@ const io = std.io;
 // TODO: Refactor the std.out and std.in to make this code look cleaner [2026_04_06]
 // TODO: Understand how the std.in and std.out actually work [2026_04_06]
 
-pub fn menu() !void{
+pub fn menu() !u8{
     var stdout_buffer:[1024]u8 = undefined;
     var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
     const stdout = &stdout_writer.interface;
@@ -29,19 +29,38 @@ pub fn menu() !void{
         user_input = try stdin.takeDelimiterExclusive('\n');
 
         const choice = try std.fmt.parseInt(u8, user_input, 10);
-        try stdout.print("choice {} its type is {}\n",.{choice, @TypeOf(choice)});
-        try stdout.flush();
-
         if(choice == 1 or choice == 2 or choice == 3){
-            break;
+            return choice;
         }
     }
+
+    return 0;
 
 }
 
 pub fn main() !void {
-    menu() catch |err|{
-        std.debug.print("{}",.{err});
+    const choice:u8 = menu() catch |err| {
+        std.debug.print("Something went wrong with the selection: {}\n",.{err});
+        return;
     };
+
+    //===================================================
+    // Maps the choice the the correct selection instance
+    //===================================================
+    switch (choice) {
+        1 => {
+            std.debug.print("You chose to play a manual game\n",.{});
+            // manualGame();
+        },
+        2 => {
+            std.debug.print("You chose to play flopie fish\n",.{});
+            // playFlopie()
+        },
+        else => {
+            std.debug.print("Exiting the program...\n",.{});
+            return;            
+        }
+        
+    }
 
 }
