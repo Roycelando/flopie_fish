@@ -1,4 +1,12 @@
 const std = @import("std");
+const root = @import("../root.zig");
+const Color = root.Color;
+
+
+pub const MoveError = error{
+    IlegealMove,
+    InvalidSquare,
+};
 
 pub const Board = struct {
     wp_bp:u64 = 65280,
@@ -22,6 +30,15 @@ pub const Board = struct {
 
     fn initBoardFromU64() void{
         return;
+    }
+
+    fn makeMove(self:*Board,color:Color,from:u6, to:u6) MoveError!void{
+        _ = self;
+        _ = color;
+        _ = from;
+        _ = to;
+
+        return MoveError.IlegealMove;
     }
 
 };
