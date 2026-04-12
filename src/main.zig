@@ -1,6 +1,8 @@
 const std = @import("std");
+const root = @import("root.zig");
 const flopie_fish = @import("flopie_fish");
 const io = std.io;
+const Board = root.Board;
 
 
 // TODO: Refactor the std.out and std.in to make this code look cleaner [2026_04_06]

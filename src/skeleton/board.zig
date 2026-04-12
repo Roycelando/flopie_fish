@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const Board = struct {
+pub const Board = struct {
     wp_bp:u64 = 65280,
     wr_bp:u64 = 129,
     wn_bp:u64 = 66,
@@ -27,18 +27,48 @@ const Board = struct {
 };
 
 pub fn printU64Bits(value:u64) void{
-    var i: i7 = 7;
+    var i: i7 = 7; // needs to be i7 since while loop will make value negative and 8*7 is 56 which is greater than the 32 in an i6 
+    var j: u4 = 0; // needs to be u4 since the while loop will increment value to number 8
+    var rank:u8 = undefined;
+
     while(i>=0):(i -= 1){
-        std.debug.print("{b:0>8}\n",.{(value >> @as(u6,@intCast(8*i))) & 0b11111111});
+        rank = @intCast((value >> @as(u6,@intCast(i*8))) & 0xFF); // getting all the ranks starting with the h rank
+        while(j<8):(j += 1){
+            std.debug.print("{b}",.{(rank >> @intCast(j)) & 0b1}); // printing bits from left to right so board looks normal
+        }
+        j =0;
+        std.debug.print("\n", .{});
     }
-    std.debug.print("\n",.{});
+        std.debug.print("\n", .{});
+}
+
+pub fn printAllU64BitBoards(board:Board)void{
+    std.debug.print("Printing black's pawns occupation\n",.{});
+    printU64Bits(board.bp_bp);
+    std.debug.print("Printing black's rooks occupation\n",.{});
+    printU64Bits(board.br_bp);
+    std.debug.print("Printing black's bishops occupation\n",.{});
+    printU64Bits(board.bb_bp);
+    std.debug.print("Printing black's knights occupation\n",.{});
+    printU64Bits(board.bn_bp);
+    std.debug.print("Printing black's queens occupation\n",.{});
+    printU64Bits(board.bq_bp);
+    std.debug.print("Printing black's kings occupation\n",.{});
+    printU64Bits(board.bk_bp);
+
+    std.debug.print("Printing white's pawns occupation\n",.{});
+    printU64Bits(board.wp_bp);
+    std.debug.print("Printing white's rooks occupation\n",.{});
+    printU64Bits(board.wr_bp);
+    std.debug.print("Printing white's bishops occupation\n",.{});
+    printU64Bits(board.wb_bp);
+    std.debug.print("Printing white's knights occupation\n",.{});
+    printU64Bits(board.wn_bp);
+    std.debug.print("Printing white's queens occupation\n",.{});
+    printU64Bits(board.wq_bp);
+    std.debug.print("Printing white's kings occupation\n",.{});
+    printU64Bits(board.wk_bp);
+
 }
 
 
-pub fn main() !void{
-    const board = Board{};
-
-    printU64Bits(board.bp_bp | board.br_bp | board.bb_bp | board.bn_bp | board.bq_bp | board.bk_bp);
-    printU64Bits(board.wp_bp | board.wr_bp | board.wb_bp | board.wn_bp | board.wq_bp | board.wk_bp);
-
-}
