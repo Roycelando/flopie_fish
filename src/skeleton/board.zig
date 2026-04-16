@@ -1,6 +1,7 @@
 const std = @import("std");
 const root = @import("../root.zig");
 const Color = root.Color;
+const Piece = root.Piece;
 
 
 pub const MoveError = error{
@@ -32,7 +33,8 @@ pub const Board = struct {
         return;
     }
 
-    fn makeMove(self:*Board,color:Color,from:u6, to:u6) MoveError!void{
+    fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6) MoveError!void{
+        _ = piece;
         _ = self;
         _ = color;
         _ = from;
