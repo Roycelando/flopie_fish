@@ -12,7 +12,7 @@ pub fn menu() !u8{
     var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
     const stdout = &stdout_writer.interface;
     
-    while(true){
+    while(true) {
         try stdout.print("\nWelcom to the flopie fish project! A chess engine written in zig by Royce Lando\n",.{});
         try stdout.print("=====================================\n",.{});
         try stdout.print("==             Menu                ==\n",.{});
@@ -21,8 +21,8 @@ pub fn menu() !u8{
         try stdout.print("2. Play Flopie Fish\n",.{});
         try stdout.print("*. Exit\n",.{});
         try stdout.flush();
-
         try stdout.print("input: ",.{});
+
         var user_input:[]const u8 = undefined;
         var stdin_buffer: [256]u8 = undefined;
         var stdin_reader = std.fs.File.stdin().reader(&stdin_buffer);
@@ -30,36 +30,47 @@ pub fn menu() !u8{
         user_input = try stdin.takeDelimiterExclusive('\n');
 
         const choice = try std.fmt.parseInt(u8, user_input, 10);
+
         if(choice == 1 or choice == 2 or choice == 3){
             return choice;
         }
     }
 
     return 0;
-
 }
 
 pub fn main() !void {
 
-    const val = 1;
+    const val = 2;
 
-    if(val == 1){
+    if(val == 1) {
         var b = root.Board{};
         try b.makeMove(.queen, .white, 3, 23);
         try b.makeMove(.pawn, .white, 11,27);
         try b.makeMove(.pawn, .white, 10,26);
-
         try b.makeMove(.pawn, .black, 51,35);
 
         var allBoards:u64 =0;
+
         for(b.getArryOfU64Boards())|item|{
             allBoards |= item.*;
         }
 
         root.printU64Bits(allBoards);
 
-
         return;
+    }
+
+    if(val == 2){
+        var b = root.Board{};
+        const asciiBoard = b.getAsciiBoard();
+        for(asciiBoard,0..)|c,i|{
+            if(@mod(i,8) == 0){
+                std.debug.print("\n",.{});
+            }
+            std.debug.print("{c}",.{c});
+        }
+
     }
 
     const choice:u8 = menu() catch |err| {
@@ -85,7 +96,5 @@ pub fn main() !void {
             std.debug.print("Exiting the program...\n",.{});
             return;            
         }
-        
     }
-
 }

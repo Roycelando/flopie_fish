@@ -37,8 +37,73 @@ pub const Board = struct {
         return;
     }
 
-    pub fn getArryOfU64Boards(self:*Board)[12] *u64{
+    pub fn getArrayOfU64Boards(self:*Board)[12] *u64{
         return [12]*u64{&self.wp_bb,&self.wr_bb,&self.wn_bb,&self.wb_bb,&self.wq_bb,&self.wk_bb,&self.bp_bb,&self.br_bb,&self.bn_bb,&self.bb_bb,&self.bq_bb,&self.bk_bb};
+    }
+
+    pub fn getAsciiBoard(self:*Board) [64]u8{
+        const pieceEnumLength = @typeInfo(Piece).@"enum".fields.len;
+        const colorEnumLength = @typeInfo(Color).@"enum".fields.len; 
+
+        var charBoard:[64]u8 = undefined;
+
+        for(0..colorEnumLength)|c|{
+            for(0..pieceEnumLength)|p|{
+                const currBoard = getBoardFromPiece(self, @enumFromInt(p), @enumFromInt(c)).*;
+
+                for(0..64)|i|{
+                    if((currBoard >> @as(u6,@intCast(i)))&1 == 1){
+                        charBoard[i] = getPieceChar(@enumFromInt(@as(u8,@intCast(p))), @enumFromInt(@as(u8,@intCast(c))));
+                    }
+                    
+                }
+
+            }
+        }
+        
+        return charBoard;
+    }
+
+    fn getPieceChar(piece:Piece,color:Color)u8{
+        switch (piece) {
+                    Piece.pawn=>{
+                        if(color == .white){
+                            return 'p';
+                        }
+                        return 'P';
+                    },
+                    Piece.rook=>{
+                        if(color == .white){
+                            return 'r';
+                        }
+                            return 'R';
+                    },
+                    Piece.knight=>{
+                        if(color == .white){
+                            return 'n';
+                        }
+                            return 'N';
+                    },
+                    Piece.bishop=>{
+                        if(color == .white){
+                            return 'b';
+                        }
+                            return 'B';
+                    },
+                    Piece.queen=>{
+                        if(color == .white){
+                            return 'q';
+                        }
+                            return 'Q';
+                    },
+                    Piece.king=>{
+                        if(color == .white){
+                            return 'k';
+                        }
+                            return 'K';
+                    },
+                }
+
     }
 
     fn getBoardFromPiece(self:*Board,piece:Piece,color:Color) *u64{
@@ -83,7 +148,7 @@ pub const Board = struct {
     }
 
     pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6) MoveError!void{
-        const allU64BitBoards = getArryOfU64Boards(self);
+        const allU64BitBoards = getArrayOfU64Boards(self);
 
         const pieceFromBoard = getBoardFromPiece(self, piece, color);
 
