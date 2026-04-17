@@ -4,7 +4,6 @@ const flopie_fish = @import("flopie_fish");
 const io = std.io;
 const Board = root.Board;
 
-
 // TODO: Refactor the std.out and std.in to make this code look cleaner [2026_04_06]
 // TODO: Understand how the std.in and std.out actually work [2026_04_06]
 
@@ -12,7 +11,7 @@ pub fn menu() !u8{
     var stdout_buffer:[1024]u8 = undefined;
     var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
     const stdout = &stdout_writer.interface;
-
+    
     while(true){
         try stdout.print("\nWelcom to the flopie fish project! A chess engine written in zig by Royce Lando\n",.{});
         try stdout.print("=====================================\n",.{});
@@ -41,6 +40,28 @@ pub fn menu() !u8{
 }
 
 pub fn main() !void {
+
+    const val = 1;
+
+    if(val == 1){
+        var b = root.Board{};
+        try b.makeMove(.queen, .white, 3, 23);
+        try b.makeMove(.pawn, .white, 11,27);
+        try b.makeMove(.pawn, .white, 10,26);
+
+        try b.makeMove(.pawn, .black, 51,35);
+
+        var allBoards:u64 =0;
+        for(b.getArryOfU64Boards())|item|{
+            allBoards |= item.*;
+        }
+
+        root.printU64Bits(allBoards);
+
+
+        return;
+    }
+
     const choice:u8 = menu() catch |err| {
         std.debug.print("Something went wrong with the selection: {}\n",.{err});
         return;
@@ -52,6 +73,8 @@ pub fn main() !void {
     switch (choice) {
         1 => {
             std.debug.print("You chose to play a manual game\n",.{});
+            const b:Board = Board{};
+            root.printAllU64BitBoards(b);
             // manualGame();
         },
         2 => {
