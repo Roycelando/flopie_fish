@@ -45,7 +45,8 @@ pub const Board = struct {
         const pieceEnumLength = @typeInfo(Piece).@"enum".fields.len;
         const colorEnumLength = @typeInfo(Color).@"enum".fields.len; 
 
-        var charBoard:[64]u8 = undefined;
+        var charBoard:[64]u8 = [_]u8{'.'} ** 64;
+       // var charBoard:[64]u8 = undefined;
 
         for(0..colorEnumLength)|c|{
             for(0..pieceEnumLength)|p|{
