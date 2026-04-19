@@ -41,7 +41,16 @@ pub fn menu() !u8{
 
 pub fn main() !void {
 
-    const val = 2;
+    const val = 3;
+
+    if (val == 3){
+        var b = root.Board{};
+        try b.makeMove(.queen, .white, 3, 10);
+
+        root.printAsciiBaord(b.getAsciiBoard());
+        _ = try root.isLegalPawnMove(&b, .white, 10, 18);
+        return;
+    }
 
     if(val == 1) {
         var b = root.Board{};
@@ -67,28 +76,11 @@ pub fn main() !void {
         try b.makeMove(.pawn, .white, 11,27);
         try b.makeMove(.pawn, .white, 10,26);
         try b.makeMove(.pawn, .black, 51,35);
+        //try b.makeMove(.bishop, .white, 3-1,64-1);
 
 
         const asciiBoard = b.getAsciiBoard();
-        var i:isize =7;
-        while(i>=0):(i-=1){
-            for(0..8)|j|{
-                const pos = @as(u6,@intCast(i*8)) + @as(u6,@intCast(j));
-                if(@mod(pos,8) == 0){
-                    std.debug.print("\n",.{});
-                }
-                if(asciiBoard[pos]>=65 and asciiBoard[pos]<=90){
-                    std.debug.print("\x1b[31m{c}\x1b[0m", .{asciiBoard[pos]});
-                }
-                else if(asciiBoard[pos]>=98 and asciiBoard[pos]<=122){
-                    std.debug.print("\x1b[33m{c}\x1b[0m", .{asciiBoard[pos]});
-                }
-                else{
-                    std.debug.print("{c}", .{asciiBoard[pos]});
-                }
-            }
-        }
-
+        root.printAsciiBaord(asciiBoard);
         return;
     }
 

@@ -195,6 +195,28 @@ pub fn printU64Bits(value:u64) void {
         std.debug.print("\n", .{});
 }
 
+pub fn printAsciiBoard(asciiBoard:[64]u8)void{
+        var i:i7 = 7;
+        while(i>=0):(i-=1){
+            for(0..8)|j|{
+                const pos = @as(u6,@intCast(i*8)) + @as(u6,@intCast(j));
+                if(@mod(pos,8) == 0){
+                    std.debug.print("\n",.{});
+                }
+                if(asciiBoard[pos]>=65 and asciiBoard[pos]<=90){
+                    std.debug.print("\x1b[32m{c}\x1b[0m", .{asciiBoard[pos]});
+                }
+                else if(asciiBoard[pos]>=98 and asciiBoard[pos]<=122){
+                    std.debug.print("\x1b[33m{c}\x1b[0m", .{asciiBoard[pos]});
+                }
+                else{
+                    std.debug.print("{c}", .{asciiBoard[pos]});
+                }
+            }
+        }
+        std.debug.print("\n",.{});
+}
+
 pub fn printAllU64BitBoards(board:Board)void{
     std.debug.print("Printing black's pawns occupation\n",.{});
     printU64Bits(board.bp_bb);
@@ -223,5 +245,7 @@ pub fn printAllU64BitBoards(board:Board)void{
     printU64Bits(board.wk_bb);
 
 }
+
+
 
 
