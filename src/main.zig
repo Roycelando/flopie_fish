@@ -63,14 +63,26 @@ pub fn main() !void {
 
     if(val == 2){
         var b = root.Board{};
-        const asciiBoard = b.getAsciiBoard();
-        for(asciiBoard,0..)|c,i|{
-            if(@mod(i,8) == 0){
-                std.debug.print("\n",.{});
-            }
-            std.debug.print("{c}",.{c});
-        }
 
+        try b.makeMove(.queen, .white, 3, 23);
+        try b.makeMove(.pawn, .white, 11,27);
+        try b.makeMove(.pawn, .white, 10,26);
+        try b.makeMove(.pawn, .black, 51,35);
+        try b.makeMove(.queen, .white, 23, 58);
+
+        const asciiBoard = b.getAsciiBoard();
+        var i:isize =7;
+        while(i>=0):(i-=1){
+            for(0..8)|j|{
+                const pos = (i*8) + @as(isize,@intCast(j));
+                if(@mod(pos,8) == 0){
+                    std.debug.print("\n",.{});
+                }
+                std.debug.print("{c}",.{asciiBoard[@intCast(pos)]});
+                
+            }
+        }
+        return;
     }
 
     const choice:u8 = menu() catch |err| {
