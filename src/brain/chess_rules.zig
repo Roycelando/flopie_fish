@@ -29,27 +29,87 @@ pub fn isLegalMove(board:*const Board, piece:Piece, from:u6, to:u6)void {
         }
     }
     return;
+
 }
 
-pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) MoveError!u64{
-    const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb;
+pub fn canPawnMoveTwo(wp_bb:Board, color:Color, square:u6) bool{
+    const wpStartingPosition:u64 = 65280;
+    const bpStartingPosition:u64 = 71776119061217280;
+
+    if(color == .white and ((wp_bb&wpStartingPosition)>>square)&1 == 1){
+        return true;
+    }
+
+    if(color == .black and ((wp_bb&bpStartingPosition)>>square)&1 == 1){
+        return true;
+    }
+    
+    return false;
+}
+
+pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) false{
+    const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
+    const allOppPieces = 
+        if(color == .white) 
+            board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb // piece occupancy board of the opposing colour
+        else 
+            board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb;
+
     const allPieces:u64 = 0;
     const allBoards = 
         board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb | 
         board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb;
-    
-    _ = to;
-    _ = allBoards;
+
+    std.debug.print("Printing all boards\n",.{});
+    const freeSapces = ~allBoards;
+    root.printU64Bits(freeSapces);
+
+    std.debug.print("Printing all free spaces\n",.{});
+    root.printU64Bits(freeSapces);
     _ = allPieces;
    
-    // check if there a pawn on the square we want to move from
+    // check if theres a pawn on the square you want to move from
     if((pawnBoard >> from)&1 != 1 ){
         std.debug.print("No pawn on square {}. Illegal move.\n",.{from});
-        return MoveError.IlegalMove;
+        return false;
     }
 
-    // 
+    // check if pawn is moving forward
+    // check pawns is only moving up one square or up one square and one square to the left or up one square and one square to the right
+    // if enpassant move, its okay
+    if(color == .white and ( to-from < 0 or (to-from>9 and (to - from != 16 or !canPawnMoveTwo(board.wp_bb, color, from))) or to - from < 7)){
+        std.debug.print("Pawns can't move in this manner\n",.{});
+        return false;
+    }
+    else if (color == .black and ( to-from > 0 or (to-from < -9 and (from-to != -16 or !canPawnMoveTwo(board.bp_bb, color, from))) or to-from > -7)){
+        std.debug.print("Pawns can't move in this manner\n",.{});
+        return false;
+    }
 
-    return 0; 
+    //check if were not being blocked by any piece so we can push the pawn up one square 
+    if(color == .white and (to - from) == 8 and (freeSapces >> to) & 1 != 1){
+        return false;
+    }
+    else if(color == .black and (to - from) == -8 and (freeSapces >> to) & 1 != 1){
+        return false;
+    }
+
+    //check if we can capture a piece diagonally to the left 
+    if(color == .white and (to - from) == 7 and (allOppPieces >> to) & 1 != 1){
+        return false;
+    }
+    else if(color == .black and (to - from) == -7 and (allOppPieces >> to) & 1 != 1){
+        return false;
+    }
+    
+    //check if we can capture a piece diagonally to the right
+    if(color == .white and (to - from) == 9 and (allOppPieces >> to) & 1 != 1){
+        return false;
+    }
+    else if(color == .black and (to - from) == -9 and (allOppPieces >> to) & 1 != 1){
+        return false;
+    }
+
+    return true; 
 }
 
