@@ -46,14 +46,13 @@ pub const Board = struct {
         const colorEnumLength = @typeInfo(Color).@"enum".fields.len; 
 
         var charBoard:[64]u8 = [_]u8{'.'} ** 64;
-       // var charBoard:[64]u8 = undefined;
 
         for(0..colorEnumLength)|c|{
             for(0..pieceEnumLength)|p|{
                 const currBoard = getBoardFromPiece(self, @enumFromInt(p), @enumFromInt(c)).*;
 
                 for(0..64)|i|{
-                    if((currBoard >> @as(u6,@intCast(i)))&0b1 == 1){
+                    if((currBoard >> @as(u6,@intCast(i))) & 1 == 1){
                         charBoard[i] = getPieceChar(@enumFromInt(@as(u8,@intCast(p))), @enumFromInt(@as(u8,@intCast(c))));
                     }
                     
