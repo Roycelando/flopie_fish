@@ -72,6 +72,7 @@ pub fn main() !void {
 
     if(val == 2){
         var b = root.Board{};
+
         try b.makeMove(.queen, .white, 3, 23);
         try b.makeMove(.pawn, .white, 11,27);
         try b.makeMove(.pawn, .white, 10,26);
