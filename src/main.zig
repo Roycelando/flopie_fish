@@ -83,7 +83,6 @@ pub fn main() !void {
         const asciiBoard = b.getAsciiBoard();
         root.printAsciiBaord(asciiBoard);
         return;
-
     }
 
     const choice:u8 = menu() catch |err| {
