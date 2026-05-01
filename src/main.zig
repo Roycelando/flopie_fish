@@ -45,10 +45,28 @@ pub fn main() !void {
 
     if (val == 3){
         var b = root.Board{};
-        try b.makeMove(.queen, .white, 3, 10);
+        try b.makeMove(.pawn, .black, 48, 25);
+        try b.makeMove(.pawn, .white, 10, 34);
+        try b.makeMove(.pawn, .white, 12, 36);
 
+        //  const square = 56;
         root.printAsciiBaord(b.getAsciiBoard());
-        _ = try root.isLegalPawnMove(&b, .white, 10, 18);
+        if(root.isLegalPawnMove(&b, .black, 50, 35)){
+            std.debug.print("Legal move\n",.{});
+        }else{
+            std.debug.print("Illegal move\n",.{});
+        }
+
+        //root.printU64Bits(b.getCopyOfAllPieceOccupancy());
+
+        // if(root.canPawnMoveTwo(b, .black, square)){
+        //     std.debug.print("The pawn on square {} CAN move two\n",.{square});
+        // }
+        // else{
+        //     std.debug.print("The pawn on square {} CANT move two\n",.{square});
+        // }
+        //
+       // _ = try root.isLegalPawnMove(&b, .white, 10, 18);
         return;
     }
 

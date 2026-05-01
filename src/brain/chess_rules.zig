@@ -1,3 +1,5 @@
+//TODO: Add a debug mode where if it is on, error messages print if its off they don't print
+
 // Imports
 const std = @import("std");
 const root = @import("../root.zig");
@@ -32,22 +34,26 @@ pub fn isLegalMove(board:*const Board, piece:Piece, from:u6, to:u6)void {
 
 }
 
-pub fn canPawnMoveTwo(wp_bb:Board, color:Color, square:u6) bool{
+pub fn canPawnMoveTwo(board:Board, color:Color, square:u6) bool{
     const wpStartingPosition:u64 = 65280;
     const bpStartingPosition:u64 = 71776119061217280;
+    const wp_bb = board.wp_bb;
+    const bp_bb = board.bp_bb;
+    const allPiecesOccupancy = board.getCopyOfAllPieceOccupancy();
 
-    if(color == .white and ((wp_bb&wpStartingPosition)>>square)&1 == 1){
+    // can move to if piece is on its starting square and if the two squares infront of the pawn are free
+    if(color == .white and ((wp_bb&wpStartingPosition)>>square)&1 == 1 and (allPiecesOccupancy>>(square+8))&1 != 1 and (allPiecesOccupancy>>(square+16))&1 != 1){
         return true;
     }
 
-    if(color == .black and ((wp_bb&bpStartingPosition)>>square)&1 == 1){
+    if(color == .black and ((bp_bb&bpStartingPosition)>>square)&1 == 1 and (allPiecesOccupancy>>(square-8))&1 != 1 and (allPiecesOccupancy>>(square-16))&1 != 1){
         return true;
     }
     
     return false;
 }
 
-pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) false{
+pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
     const allOppPieces = 
         if(color == .white) 
@@ -77,11 +83,13 @@ pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) false{
     // check if pawn is moving forward
     // check pawns is only moving up one square or up one square and one square to the left or up one square and one square to the right
     // if enpassant move, its okay
-    if(color == .white and ( to-from < 0 or (to-from>9 and (to - from != 16 or !canPawnMoveTwo(board.wp_bb, color, from))) or to - from < 7)){
+    // if distance is gonna be greater than 9 than it better be 16 and pawn should be able to move 2
+    // any values less than 7 don aren't pawn moves
+    if(color == .white and ((to-from) <= 0 or (to-from>9 and ((to - from) != 16 or !canPawnMoveTwo(board.*, color, from))) or ((to - from) < 7))){
         std.debug.print("Pawns can't move in this manner\n",.{});
         return false;
     }
-    else if (color == .black and ( to-from > 0 or (to-from < -9 and (from-to != -16 or !canPawnMoveTwo(board.bp_bb, color, from))) or to-from > -7)){
+    else if (color == .black and ((to-from) > 0 or ((to-from) < -9 and ((to-from) != -16 or !canPawnMoveTwo(board.*, color, from))) or to-from > -7)){
         std.debug.print("Pawns can't move in this manner\n",.{});
         return false;
     }

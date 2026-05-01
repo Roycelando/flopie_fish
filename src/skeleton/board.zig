@@ -37,6 +37,10 @@ pub const Board = struct {
         return;
     }
 
+    pub fn getCopyOfAllPieceOccupancy(self:Board) u64{
+        return (self.wp_bb | self.wr_bb | self.wn_bb | self.wb_bb | self.wq_bb | self.wk_bb | self.bp_bb | self.br_bb | self.bn_bb | self.bb_bb | self.bq_bb | self.bk_bb);
+    }
+
     pub fn getArrayOfU64Boards(self:*Board)[12] *u64{
         return [12]*u64{&self.wp_bb,&self.wr_bb,&self.wn_bb,&self.wb_bb,&self.wq_bb,&self.wk_bb,&self.bp_bb,&self.br_bb,&self.bn_bb,&self.bb_bb,&self.bq_bb,&self.bk_bb};
     }
