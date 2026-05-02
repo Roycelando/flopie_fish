@@ -10,7 +10,7 @@ const Color = root.Color;
 const Board = root.Board;
 const MoveError = root.MoveError;
 
-pub fn isLegalMove(board:*const Board, piece:Piece, from:u6, to:u6)void {
+pub fn isMoveLegal(board:*const Board, piece:Piece, from:u6, to:u6)void {
     _= board;
     _= from;
     _= to;
@@ -55,24 +55,21 @@ pub fn canPawnMoveTwo(board:Board, color:Color, square:u6) bool{
 
 pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
+    const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const allOppPieces = 
         if(color == .white) 
             board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb // piece occupancy board of the opposing colour
         else 
             board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb;
 
-    const allPieces:u64 = 0;
-    const allBoards = 
-        board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb | 
-        board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb;
+    const allPieces = board.getCopyOfAllPieceOccupancy();
+    const freeSapces = ~allPieces;
+    const oppKing = 
+        if(color == .white) 
+            board.bk_bb
+        else
+            board.wk_bb;
 
-    std.debug.print("Printing all boards\n",.{});
-    const freeSapces = ~allBoards;
-    root.printU64Bits(freeSapces);
-
-    std.debug.print("Printing all free spaces\n",.{});
-    root.printU64Bits(freeSapces);
-    _ = allPieces;
    
     // check if theres a pawn on the square you want to move from
     if((pawnBoard >> from)&1 != 1 ){
@@ -85,36 +82,37 @@ pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
     // if enpassant move, its okay
     // if distance is gonna be greater than 9 than it better be 16 and pawn should be able to move 2
     // any values less than 7 don aren't pawn moves
-    if(color == .white and ((to-from) <= 0 or (to-from>9 and ((to - from) != 16 or !canPawnMoveTwo(board.*, color, from))) or ((to - from) < 7))){
-        std.debug.print("Pawns can't move in this manner\n",.{});
+    if(color == .white and (delta <= 0 or (delta>9 and (delta != 16 or !canPawnMoveTwo(board.*, color, from))) or (delta < 7))){
+        std.debug.print("White pawns can't move in this manner\n",.{});
         return false;
     }
-    else if (color == .black and ((to-from) > 0 or ((to-from) < -9 and ((to-from) != -16 or !canPawnMoveTwo(board.*, color, from))) or to-from > -7)){
-        std.debug.print("Pawns can't move in this manner\n",.{});
+    else if (color == .black and (delta > 0 or (delta < -9 and (delta != -16 or !canPawnMoveTwo(board.*, color, from))) or delta > -7)){
+        std.debug.print("Black pawns can't move in this manner\n",.{});
         return false;
     }
 
     //check if were not being blocked by any piece so we can push the pawn up one square 
-    if(color == .white and (to - from) == 8 and (freeSapces >> to) & 1 != 1){
+    if(color == .white and delta == 8 and (freeSapces >> to) & 1 != 1){
         return false;
     }
-    else if(color == .black and (to - from) == -8 and (freeSapces >> to) & 1 != 1){
+    else if(color == .black and delta == -8 and (freeSapces >> to) & 1 != 1){
         return false;
     }
 
     //check if we can capture a piece diagonally to the left 
-    if(color == .white and (to - from) == 7 and (allOppPieces >> to) & 1 != 1){
+    //check that piece you're trying to capture is not a king
+    if(color == .white and delta == 7 and (allOppPieces >> to) & 1 != 1){
         return false;
     }
-    else if(color == .black and (to - from) == -7 and (allOppPieces >> to) & 1 != 1){
+    else if(color == .black and delta == -7 and (allOppPieces >> to) & 1 != 1){
         return false;
     }
     
     //check if we can capture a piece diagonally to the right
-    if(color == .white and (to - from) == 9 and (allOppPieces >> to) & 1 != 1){
+    if(color == .white and delta == 9 and ((allOppPieces >> to) & 1 != 1) or (oppKing >> to) & 1 == 1){
         return false;
     }
-    else if(color == .black and (to - from) == -9 and (allOppPieces >> to) & 1 != 1){
+    else if(color == .black and delta == -9 and ((allOppPieces >> to) & 1 != 1) or (oppKing >> to) & 1 == 1){
         return false;
     }
 

@@ -45,14 +45,19 @@ pub fn main() !void {
 
     if (val == 3){
         var b = root.Board{};
-        try b.makeMove(.pawn, .black, 48, 25);
-        try b.makeMove(.pawn, .white, 10, 34);
-        try b.makeMove(.pawn, .white, 12, 36);
+        try b.makeMove(.pawn, .white, 11, 53);
+        try b.makeMove(.pawn, .white, 10, 51);
+       // try b.makeMove(.pawn, .black, 51, 35);
+        try b.makeMove(.pawn, .black, 49, 13);
+
 
         //  const square = 56;
         root.printAsciiBaord(b.getAsciiBoard());
-        if(root.isLegalPawnMove(&b, .black, 50, 35)){
+
+        if(root.isLegalPawnMove(&b, .black, 13, 5)){
+            try b.makeMove(.pawn,.black,13,5);
             std.debug.print("Legal move\n",.{});
+            root.printAsciiBaord(b.getAsciiBoard());
         }else{
             std.debug.print("Illegal move\n",.{});
         }
