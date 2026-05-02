@@ -29,7 +29,9 @@ pub const Board = struct {
     bq_bb:u64 = 576460752303423488,
     bk_bb:u64 = 1152921504606846976,
 
-    en_passant:u6 = 0, 
+    en_passant:?u6 = null, 
+    flag_enpassant:bool = true,
+    capture_enpassant:bool = true,
 
 
     fn initBoardFromU64Array() void{
@@ -184,7 +186,34 @@ pub const Board = struct {
         return false;
     }
 
-    pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6, flagEnpassant:bool) MoveError!void{
+    fn captureEnpassant(self:*Board, piece:Piece, color:Color, from:u6, to:u6) bool{
+       _ = from;
+        if(piece != .pawn){
+            return false;
+        }
+
+        if(to != self.en_passant){
+            return false;
+        }
+
+
+        if(color == .white){
+             const captureMask:u64 = @as(u64, 1) << (to - 8);
+             self.bp_bb ^= captureMask;
+             return true;
+        }
+        else{
+             const captureMask:u64 = @as(u64, 1) << (to + 8);
+             self.wp_bb ^= captureMask;
+             return true;
+        }
+
+        return false;
+    }
+
+    pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6) MoveError!void{
+        std.debug.print("can capture enpassant: {} enpassant value: {?} to value: {} --> ",.{self.capture_enpassant, self.en_passant, to});
+
         const allU64BitBoards = getArrayOfU64Boards(self);
 
         const pieceFromBoard = getBoardFromPiece(self, piece, color);
@@ -197,13 +226,15 @@ pub const Board = struct {
         
         for(0..allU64BitBoards.len)|i|{
             if((allU64BitBoards[i].* >> to) & 1 == 1){
-                std.debug.print("The board {} contians a piece on the square you want to move to\n",.{i});
+                std.debug.print("The board {} contians a piece on the square you want to move to, capturing the piece\n",.{i});
                 //for testing value before printU64Bits(allU64BitBoards[i].*);
                 const toMask:u64 = @as(u64,1)<<to;
                 allU64BitBoards[i].* ^= toMask;
                 //for testing value after printU64Bits(allU64BitBoards[i].*);
             }
         }
+
+        
 
         
     
@@ -214,9 +245,20 @@ pub const Board = struct {
         //for testing the move made printU64Bits(pieceFromBoard.*);
 
         // if enabled sest the enpassant flag if valid
-        if(flagEnpassant and piece == .pawn and checkThenSetEnpassant(self, piece, color, from, to)){
-            std.debug.print("Enpassant detected setting the flag at position {}",.{self.en_passant});
+        if(self.flag_enpassant and piece == .pawn and checkThenSetEnpassant(self, piece, color, from, to)){
+            std.debug.print("Enpassant detected setting the flag at position {?}\n",.{self.en_passant});
+            return; // we return early so enpassant isn't removed
         }
+
+        else if(self.capture_enpassant and piece == .pawn and self.en_passant != null and to == self.en_passant ){
+            if(captureEnpassant(self, piece, color, from, to)){
+                std.debug.print("captured enpassant\n",.{});
+            }else{
+                std.debug.print("failed to capture",.{});
+            }
+        }
+
+        self.en_passant = null;
 
         return;
     }

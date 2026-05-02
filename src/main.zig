@@ -45,12 +45,19 @@ pub fn main() !void {
 
     if (val == 3){
         var b = root.Board{};
-        // try b.makeMove(.pawn, .white, 15, 31, false);
-        try b.makeMove(.pawn, .black, 48, 32, true);
+        try b.makeMove(.pawn, .white, 9, 33);
+        try b.makeMove(.pawn, .black, 48, 32);
+        try b.makeMove(.pawn, .white, 33 , 40); 
 
 
-        //  const square = 56;
+        try b.makeMove(.pawn, .black, 51, 27);
+        try b.makeMove(.pawn, .black, 49, 25);
+        try b.makeMove(.pawn, .white, 10, 26);
+        try b.makeMove(.pawn, .black, 27 , 18);
+
+
         root.printAsciiBaord(b.getAsciiBoard());
+
 
         // if(root.isLegalPawnMove(&b, .black, 13, 5)){
         //     try b.makeMove(.pawn,.black,13,5);
@@ -99,7 +106,6 @@ pub fn main() !void {
         try b.makeMove(.pawn, .white, 10,26);
         try b.makeMove(.pawn, .black, 51,35);
         //try b.makeMove(.bishop, .white, 3-1,64-1);
-
 
         const asciiBoard = b.getAsciiBoard();
         root.printAsciiBaord(asciiBoard);
