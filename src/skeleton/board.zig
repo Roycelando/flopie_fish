@@ -29,6 +29,9 @@ pub const Board = struct {
     bq_bb:u64 = 576460752303423488,
     bk_bb:u64 = 1152921504606846976,
 
+    en_passant:u6 = 0, 
+
+
     fn initBoardFromU64Array() void{
         return;
     }
@@ -151,7 +154,37 @@ pub const Board = struct {
         }
     }
 
-    pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6) MoveError!void{
+    fn checkThenSetEnpassant(self:*Board ,piece:Piece, color:Color, from:u6, to:u6) bool{
+
+        const pawnStartingPosition:u64 = if(color == .white) 65280 else 71776119061217280;
+        const delta:i7 = @as(i7,to) - @as(i7,from);
+
+        if(piece != .pawn){
+            return false;
+        }
+        // enpassant requires move two
+        if(color == .white and delta != 16){
+            return false;
+        }
+
+        // enpassant requires move two
+        if(color == .black and delta != -16){
+            return false;
+        }
+
+        if(((pawnStartingPosition >> from) & 1) == 1){
+            if(color == .white){
+                self.en_passant = to - 8; 
+            }else{
+                self.en_passant = to + 8; 
+            }
+           return true;
+        }
+
+        return false;
+    }
+
+    pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6, flagEnpassant:bool) MoveError!void{
         const allU64BitBoards = getArrayOfU64Boards(self);
 
         const pieceFromBoard = getBoardFromPiece(self, piece, color);
@@ -171,12 +204,20 @@ pub const Board = struct {
                 //for testing value after printU64Bits(allU64BitBoards[i].*);
             }
         }
+
+        
     
         std.debug.print("The squre you're moving to is empty, moving piece to square\n",.{});
-        const mask:u64 = @as(u64,1)<<from | @as(u64,1)<<to;
+        const mask:u64 = @as(u64,1)<<from | @as(u64,1)<<to; // setting the in the correct place
         //for testing mask printU64Bits(mask);
         pieceFromBoard.* ^= mask; // the mask will remove the piece from old position and put it to new position
         //for testing the move made printU64Bits(pieceFromBoard.*);
+
+        // if enabled sest the enpassant flag if valid
+        if(flagEnpassant and piece == .pawn and checkThenSetEnpassant(self, piece, color, from, to)){
+            std.debug.print("Enpassant detected setting the flag at position {}",.{self.en_passant});
+        }
+
         return;
     }
 
