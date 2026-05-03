@@ -101,18 +101,26 @@ pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
 
     //check if we can capture a piece diagonally to the left 
     //check that piece you're trying to capture is not a king
-    if(color == .white and delta == 7 and (allOppPieces >> to) & 1 != 1){
+    if(color == .white and delta == 7 and (((allOppPieces >> to) & 1 != 1) and board.en_passant != to) or (oppKing >> to) & 1 == 1){
+
+        std.debug.print("{} pawn trying to capture left\n",.{color});
         return false;
     }
-    else if(color == .black and delta == -7 and (allOppPieces >> to) & 1 != 1){
+    else if(color == .black and delta == -7 and (((allOppPieces >> to) & 1 != 1) and board.en_passant != to) or (oppKing >> to) & 1 == 1){
+
+        std.debug.print("{} pawn trying to capture left\n",.{color});
         return false;
     }
     
     //check if we can capture a piece diagonally to the right
-    if(color == .white and delta == 9 and ((allOppPieces >> to) & 1 != 1) or (oppKing >> to) & 1 == 1){
+    if(color == .white and delta == 9 and (((allOppPieces >> to) & 1 != 1 and board.en_passant != to) or (oppKing >> to) & 1 == 1)){
+
+        std.debug.print("{} pawn trying to capture right\n",.{color});
         return false;
     }
-    else if(color == .black and delta == -9 and ((allOppPieces >> to) & 1 != 1) or (oppKing >> to) & 1 == 1){
+    else if(color == .black and delta == -9 and (((allOppPieces >> to) & 1 != 1) and board.en_passant != to) or (oppKing >> to) & 1 == 1){
+
+        std.debug.print("{} pawn trying to capture right\n",.{color});
         return false;
     }
 

@@ -41,7 +41,24 @@ pub fn menu() !u8{
 
 pub fn main() !void {
 
-    const val = 3;
+    const val = 4;
+    if(val == 4){
+        var b = root.Board{};
+        try b.makeMove(.pawn,.black,51,11);
+        try b.makeMove(.pawn,.black,53,13);
+
+        try b.makeMove(.pawn,.white,10,51);
+        try b.makeMove(.pawn,.white,14,53);
+ 
+        root.printAsciiBaord(b.getAsciiBoard());
+
+        if(root.isLegalPawnMove(&b, .white, 51, 60)){
+            std.debug.print("Is legal move\n",.{});
+        }else{
+            std.debug.print("Illegal move\n",.{});
+        }
+        return;
+    }
 
     if (val == 3){
         var b = root.Board{};
