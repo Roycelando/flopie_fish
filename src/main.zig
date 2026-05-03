@@ -47,14 +47,17 @@ pub fn main() !void {
         var b = root.Board{};
         try b.makeMove(.pawn, .white, 9, 33);
         try b.makeMove(.pawn, .black, 48, 32);
-        try b.makeMove(.pawn, .white, 33 , 40); 
+        try b.makeMove(.pawn, .black, 50, 34);
+        try b.makeMove(.pawn, .white, 33 , 42); 
+        try b.makeMove(.pawn, .black, 52, 36);
+        try b.makeMove(.pawn, .white, 42 , 44); 
 
 
         try b.makeMove(.pawn, .black, 51, 27);
         try b.makeMove(.pawn, .black, 49, 25);
         try b.makeMove(.pawn, .white, 10, 26);
-        try b.makeMove(.pawn, .black, 27 , 18);
-
+        //try b.makeMove(.pawn, .black, 27 , 18);
+        //try b.makeMove(.pawn, .black, 25 , 16);
 
         root.printAsciiBaord(b.getAsciiBoard());
 

@@ -238,7 +238,7 @@ pub const Board = struct {
 
         
     
-        std.debug.print("The squre you're moving to is empty, moving piece to square\n",.{});
+        std.debug.print("The sqaure you're moving to is empty, moving piece to square\n",.{});
         const mask:u64 = @as(u64,1)<<from | @as(u64,1)<<to; // setting the in the correct place
         //for testing mask printU64Bits(mask);
         pieceFromBoard.* ^= mask; // the mask will remove the piece from old position and put it to new position
