@@ -53,7 +53,7 @@ pub fn canPawnMoveTwo(board:Board, color:Color, square:u6) bool{
     return false;
 }
 
-pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
+pub fn isPawnMoveLegalOld(board:*Board, color:Color, from:u6, to:u6) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
     const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const allOppPieces = 
@@ -127,7 +127,7 @@ pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6) bool{
     return true; 
 }
 
-pub fn isPawnMoveLegalRefactor(board:*Board, color:Color, from:u6, to:u6,showError:bool) bool{
+pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6,showError:bool) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
     const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const allPieces = board.getCopyOfAllPieceOccupancy();
@@ -171,11 +171,11 @@ pub fn isPawnMoveLegalRefactor(board:*Board, color:Color, from:u6, to:u6,showErr
     }
 
     // check if pawn is moving up to the left one square, up one square, up to the right one square, or up two. Else not a legal move
-    if(color == .white and (delta != 7 or delta != 8 or delta != 9 or delta != 16)){
+    if(color == .white and (delta != 7 and delta != 8 and delta != 9 and delta != 16)){
          if(showError)
             std.debug.print("The white pawn can't manuver in this manner\n",.{});
     }
-    else if(color == .black and (delta != -7 or delta != -8 or delta != -9 or delta != 16)){
+    else if(color == .black and (delta != -7 and delta != -8 and delta != -9 and delta != 16)){
          if(showError)
             std.debug.print("The black pawn can't manuver in this manner\n",.{});
     }
@@ -208,9 +208,9 @@ pub fn isPawnMoveLegalRefactor(board:*Board, color:Color, from:u6, to:u6,showErr
             std.debug.print("White pawn cant capture right. No black piece on that square nor is enpassant available\n",.{});        
             return false;
     }
-    else if(color == .black and delta == -9 and (((allOppPieces >> to) & 1 != 1) and board.en_passant != to)){
+    else if(color == .black and delta == -9 and (((allOppPieces >> to) & 1 == 0) and board.en_passant != to)){
         if(showError)
-            std.debug.print("Black pawn cant capture right. No black piece on that square nor is enpassant available\n",.{});
+            std.debug.print("Black pawn cant capture right. No white piece on that square nor is enpassant available\n",.{});
         return false;
     }
 

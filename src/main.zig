@@ -52,7 +52,7 @@ pub fn main() !void {
  
         root.printAsciiBaord(b.getAsciiBoard());
 
-        if(root.isLegalPawnMove(&b, .white, 51, 60)){
+        if(root.isLegalPawnMove(&b, .white, 51, 60,true)){
             std.debug.print("Is legal move\n",.{});
         }else{
             std.debug.print("Illegal move\n",.{});
