@@ -127,7 +127,7 @@ pub fn isPawnMoveLegalOld(board:*Board, color:Color, from:u6, to:u6) bool{
     return true; 
 }
 
-pub fn isPawnMoveLegal(board:*Board, color:Color, from:u6, to:u6,showError:bool) bool{
+pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, comptime to:u6,showError:bool) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
     const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const allPieces = board.getCopyOfAllPieceOccupancy();
