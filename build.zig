@@ -41,6 +41,16 @@ pub fn build(b: *std.Build) void {
         .target = target,
     });
 
+
+    // Royce here. Im creating my own module so I can run test from the immune_system folder
+    const immune_system_mod = b.addModule("immune_system", .{
+        .root_source_file = b.path("src/immune_system/tests.zig"),
+        .target = target,
+        .imports = &.{
+        .{ .name = "flopie_fish", .module = mod },
+        }
+    });
+
     // Here we define an executable. An executable needs to have a root module
     // which needs to expose a `main` function. While we could add a main function
     // to the module defined above, it's sometimes preferable to split business
@@ -122,8 +132,12 @@ pub fn build(b: *std.Build) void {
         .root_module = mod,
     });
 
+    const mod_immune_system_tests = b.addTest(.{.root_module = immune_system_mod});
+
     // A run step that will run the test executable.
     const run_mod_tests = b.addRunArtifact(mod_tests);
+
+    
 
     // Creates an executable that will run `test` blocks from the executable's
     // root module. Note that test executables only test one module at a time,
@@ -132,8 +146,10 @@ pub fn build(b: *std.Build) void {
         .root_module = exe.root_module,
     });
 
+
     // A run step that will run the second test executable.
     const run_exe_tests = b.addRunArtifact(exe_tests);
+    const run_immune_system_tests = b.addRunArtifact(mod_immune_system_tests);
 
     // A top level step for running all tests. dependOn can be called multiple
     // times and since the two run steps do not depend on one another, this will
@@ -141,6 +157,7 @@ pub fn build(b: *std.Build) void {
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_mod_tests.step);
     test_step.dependOn(&run_exe_tests.step);
+    test_step.dependOn(&run_immune_system_tests.step);
 
     // Just like flags, top level steps are also listed in the `--help` menu.
     //
