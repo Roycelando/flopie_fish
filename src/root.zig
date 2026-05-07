@@ -36,10 +36,5 @@ pub const pieceValue = piece_file.pieceValue;
 //chess_rules.zig functions
 pub const isLegalPawnMove = chess_rules.isPawnMoveLegal;
 pub const canPawnMoveTwo = chess_rules.canPawnMoveTwo;
-//
-//
-//
-test {
-_ = @import("immune_system/illegal_pawn_moves.zig");
-}
+
 

@@ -1,5 +1,5 @@
 const std = @import("std");
-const root = @import("root.zig");
+const root = @import("flopie_fish");
 const flopie_fish = @import("flopie_fish");
 const io = std.io;
 const Board = root.Board;
@@ -41,8 +41,9 @@ pub fn menu() !u8{
 
 pub fn main() !void {
 
-    const val = 4;
-    if(val == 4){
+    const val = 1;
+    
+    if(val == 1){
         var b = root.Board{};
         try b.makeMove(.pawn,.black,51,11);
         try b.makeMove(.pawn,.black,53,13);
@@ -60,77 +61,6 @@ pub fn main() !void {
         return;
     }
 
-    if (val == 3){
-        var b = root.Board{};
-        try b.makeMove(.pawn, .white, 9, 33);
-        try b.makeMove(.pawn, .black, 48, 32);
-        try b.makeMove(.pawn, .black, 50, 34);
-        try b.makeMove(.pawn, .white, 33 , 42); 
-        try b.makeMove(.pawn, .black, 52, 36);
-        try b.makeMove(.pawn, .white, 42 , 44); 
-
-
-        try b.makeMove(.pawn, .black, 51, 27);
-        try b.makeMove(.pawn, .black, 49, 25);
-        try b.makeMove(.pawn, .white, 10, 26);
-        //try b.makeMove(.pawn, .black, 27 , 18);
-        //try b.makeMove(.pawn, .black, 25 , 16);
-
-        root.printAsciiBaord(b.getAsciiBoard());
-
-
-        // if(root.isLegalPawnMove(&b, .black, 13, 5)){
-        //     try b.makeMove(.pawn,.black,13,5);
-        //     std.debug.print("Legal move\n",.{});
-        //     root.printAsciiBaord(b.getAsciiBoard());
-        // }else{
-        //     std.debug.print("Illegal move\n",.{});
-        // }
-
-        //root.printU64Bits(b.getCopyOfAllPieceOccupancy());
-
-        // if(root.canPawnMoveTwo(b, .black, square)){
-        //     std.debug.print("The pawn on square {} CAN move two\n",.{square});
-        // }
-        // else{
-        //     std.debug.print("The pawn on square {} CANT move two\n",.{square});
-        // }
-        //
-       // _ = try root.isLegalPawnMove(&b, .white, 10, 18);
-        return;
-    }
-
-    if(val == 1) {
-        var b = root.Board{};
-        try b.makeMove(.queen, .white, 3, 23);
-        try b.makeMove(.pawn, .white, 11,27);
-        try b.makeMove(.pawn, .white, 10,26);
-        try b.makeMove(.pawn, .black, 51,35);
-
-        var allBoards:u64 =0;
-
-        for(b.getArryOfU64Boards())|item|{
-            allBoards |= item.*;
-        }
-
-        root.printU64Bits(allBoards);
-
-        return;
-    }
-
-    if(val == 2){
-        var b = root.Board{};
-
-        try b.makeMove(.queen, .white, 3, 23);
-        try b.makeMove(.pawn, .white, 11,27);
-        try b.makeMove(.pawn, .white, 10,26);
-        try b.makeMove(.pawn, .black, 51,35);
-        //try b.makeMove(.bishop, .white, 3-1,64-1);
-
-        const asciiBoard = b.getAsciiBoard();
-        root.printAsciiBaord(asciiBoard);
-        return;
-    }
 
     const choice:u8 = menu() catch |err| {
         std.debug.print("Something went wrong with the selection: {}\n",.{err});
