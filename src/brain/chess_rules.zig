@@ -73,7 +73,7 @@ pub fn isPawnMoveLegalOld(board:*Board, color:Color, from:u6, to:u6) bool{
    
     // check if theres a pawn on the square you want to move from
     if((pawnBoard >> from)&1 != 1 ){
-        std.debug.print("No pawn on square {}. Illegal move.\n",.{from});
+        std.debug.print("No {} pawn on square {}. Illegal move.\n",.{color, from});
         return false;
     }
 
@@ -127,7 +127,7 @@ pub fn isPawnMoveLegalOld(board:*Board, color:Color, from:u6, to:u6) bool{
     return true; 
 }
 
-pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, comptime to:u6,showError:bool) bool{
+pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, comptime to:u6,comptime showError:bool) bool{
     const pawnBoard = if(color == .white) board.wp_bb else board.bp_bb; // pawns of the current colour
     const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const allPieces = board.getCopyOfAllPieceOccupancy();
@@ -161,12 +161,12 @@ pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, com
     // check if the pawn can move 2
     if(color == .white and delta == 16 and !canPawnMoveTwo(board.*, color, from)){
         if(showError)
-            std.debug.print("The white pawn can't move two anymore\n",.{});
+            std.debug.print("The white pawn can't move two. May not be on its starting square or path is blocked\n",.{});
         return false;
     }
     else if(color == .black and delta == -16 and !canPawnMoveTwo(board.*, color, from)){
         if(showError)
-            std.debug.print("The black pawn can't move two anymore\n",.{});
+            std.debug.print("The black pawn can't move two. May not be on its starting square or path is blocked\n",.{});
         return false;
     }
 
