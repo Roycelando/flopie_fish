@@ -174,10 +174,12 @@ pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, com
     if(color == .white and (delta != 7 and delta != 8 and delta != 9 and delta != 16)){
          if(showError)
             std.debug.print("The white pawn can't manuver in this manner\n",.{});
+         return false;
     }
-    else if(color == .black and (delta != -7 and delta != -8 and delta != -9 and delta != 16)){
+    else if(color == .black and (delta != -7 and delta != -8 and delta != -9 and delta != -16)){
          if(showError)
             std.debug.print("The black pawn can't manuver in this manner\n",.{});
+         return false;
     }
 
     //check if were not being blocked by any piece so we can push the pawn up one square 
