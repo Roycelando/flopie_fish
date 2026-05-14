@@ -32,7 +32,9 @@ test "White pawn can't move two if pieces is blocking its path"{
 }
 
 test "Black pawn can't move two if pieces is blocking its path"{
-
+    var b = root.Board{.wp_bb = 8864812558080};
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 11, 27,true)); 
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 12, 28,true)); 
 }
 
 test "White pawn can't move backwards"{
