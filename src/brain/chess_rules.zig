@@ -141,7 +141,7 @@ pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, com
     // check if theres a pawn on the square you want to move from
     if((pawnBoard >> from)&1 != 1 ){
         if(showError)
-            std.debug.print("No pawn on square {}. Illegal move.\n",.{from});
+            std.debug.print("No {} pawn on square {}. Illegal move.\n",.{color,from});
         
         return false;
     }
@@ -149,48 +149,48 @@ pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, com
     //check that the pawn is moving forward
     if(color == .white and delta <= 0){
         if(showError)
-            std.debug.print("White pawns can't move backwards\n",.{});
+            std.debug.print("[White] Pawns can't move backwards\n",.{});
         return false;
     }
     else if (color == .black and delta >= 0){
         if(showError)
-            std.debug.print("Black pawns can't move backwards\n",.{});
+            std.debug.print("[Black] Pawns can't move backwards\n",.{});
         return false;
     }
 
     // check if the pawn can move 2
     if(color == .white and delta == 16 and !canPawnMoveTwo(board.*, color, from)){
         if(showError)
-            std.debug.print("The white pawn can't move two. May not be on its starting square or path is blocked\n",.{});
+            std.debug.print("[White] The pawn can't move two. May not be on its starting square or path is blocked\n",.{});
         return false;
     }
     else if(color == .black and delta == -16 and !canPawnMoveTwo(board.*, color, from)){
         if(showError)
-            std.debug.print("The black pawn can't move two. May not be on its starting square or path is blocked\n",.{});
+            std.debug.print("[Black] The pawn can't move two. May not be on its starting square or path is blocked\n",.{});
         return false;
     }
 
     // check if pawn is moving up to the left one square, up one square, up to the right one square, or up two. Else not a legal move
     if(color == .white and (delta != 7 and delta != 8 and delta != 9 and delta != 16)){
          if(showError)
-            std.debug.print("The white pawn can't manuver in this manner\n",.{});
+            std.debug.print("[White] The pawn can't manuver in this manner\n",.{});
          return false;
     }
     else if(color == .black and (delta != -7 and delta != -8 and delta != -9 and delta != -16)){
          if(showError)
-            std.debug.print("The black pawn can't manuver in this manner\n",.{});
+            std.debug.print("[Black] The pawn can't manuver in this manner\n",.{});
          return false;
     }
 
     //check if were not being blocked by any piece so we can push the pawn up one square 
     if(color == .white and delta == 8 and (freeSapces >> to) & 1 == 0){
        if(showError)
-            std.debug.print("The white pawn can't move up a square since its blocked by a piece \n",.{});
+            std.debug.print("[White] The pawn can't move up a square since its blocked by a piece \n",.{});
         return false;
     }
     else if(color == .black and delta == -8 and (freeSapces >> to) & 1 == 0){
         if(showError)
-            std.debug.print("The black pawn can't move up a square since its blocked by a piece \n",.{});
+            std.debug.print("[Black] The pawn can't move up a square since its blocked by a piece \n",.{});
         return false;
     }
 
