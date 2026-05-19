@@ -219,5 +219,12 @@ pub fn isPawnMoveLegal(board:*Board, comptime color:Color, comptime from:u6, com
     return true;
 }
 
+ isKnightMoveLegal(board:*Board, comptime color:Color, comptime from:u6, comptime to:u6,comptime showError:bool) bool{
+     const delta:i8 = to - from;
+
+
+    return false;
+ }
+
 
 

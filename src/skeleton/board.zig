@@ -265,6 +265,14 @@ pub const Board = struct {
 
 };
 
+pub fn getOpponentOccupancyU64Bits(board:Board,colour:Color)u64{
+    if(colour == .white){
+        return board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb; // piece occupancy board of the opposing colour
+    }
+
+    return board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb;
+}
+
 pub fn printU64Bits(value:u64) void {
     var i: i7 = 7; // needs to be i7 since while loop will make value negative and 8*7 is 56 which is greater than the 32 in an i6 
     var j: u4 = 0; // needs to be u4 since the while loop will increment value to number 8

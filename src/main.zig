@@ -1,6 +1,5 @@
 const std = @import("std");
-const root = @import("flopie_fish");
-const flopie_fish = @import("flopie_fish");
+const root = @import("root.zig");
 const io = std.io;
 const Board = root.Board;
 
@@ -45,11 +44,11 @@ pub fn main() !void {
     
     if(val == 1){
         var b = root.Board{};
-        try b.makeMove(.pawn,.black,51,11);
-        try b.makeMove(.pawn,.black,53,13);
+        try b.makeMove(.pawn,.black,51,11,true);
+        try b.makeMove(.pawn,.black,53,13,true);
 
-        try b.makeMove(.pawn,.white,10,51);
-        try b.makeMove(.pawn,.white,14,53);
+        try b.makeMove(.pawn,.white,10,51,true);
+        try b.makeMove(.pawn,.white,14,53,true);
  
         root.printAsciiBaord(b.getAsciiBoard());
 
