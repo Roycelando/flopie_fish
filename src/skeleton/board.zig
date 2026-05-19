@@ -211,8 +211,7 @@ pub const Board = struct {
         return false;
     }
 
-    pub fn makeMove(self:*Board,piece:Piece, color:Color,from:u6, to:u6) MoveError!void{
-        std.debug.print("can capture enpassant: {} enpassant value: {?} to value: {} --> ",.{self.capture_enpassant, self.en_passant, to});
+    pub fn makeMove(self:*Board, comptime piece:Piece, comptime color:Color,comptime from:u6, comptime to:u6, comptime showMsg:bool) MoveError!void{
 
         const allU64BitBoards = getArrayOfU64Boards(self);
 
@@ -220,25 +219,23 @@ pub const Board = struct {
 
         // Ensures the piece you're moving is present on the from square
         if((pieceFromBoard.* >> from) & 1 != 1){
+            if(showMsg)
                 std.debug.print("There is no {} {} on this square to move\n",.{color,piece});
-                return MoveError.IlegalMove;
+            return MoveError.IlegalMove;
         }
         
         for(0..allU64BitBoards.len)|i|{
             if((allU64BitBoards[i].* >> to) & 1 == 1){
-                std.debug.print("The board {} contians a piece on the square you want to move to, capturing the piece\n",.{i});
-                //for testing value before printU64Bits(allU64BitBoards[i].*);
+                if(showMsg)
+                    std.debug.print("Capturing piece on square number {} \n",.{to});
                 const toMask:u64 = @as(u64,1)<<to;
                 allU64BitBoards[i].* ^= toMask;
-                //for testing value after printU64Bits(allU64BitBoards[i].*);
             }
         }
 
-        
+        if(showMsg)
+            std.debug.print("Moving piece from {} to square {}\n",.{from, to});
 
-        
-    
-        std.debug.print("The sqaure you're moving to is empty, moving piece to square\n",.{});
         const mask:u64 = @as(u64,1)<<from | @as(u64,1)<<to; // setting the in the correct place
         //for testing mask printU64Bits(mask);
         pieceFromBoard.* ^= mask; // the mask will remove the piece from old position and put it to new position
@@ -246,15 +243,18 @@ pub const Board = struct {
 
         // if enabled sest the enpassant flag if valid
         if(self.flag_enpassant and piece == .pawn and checkThenSetEnpassant(self, piece, color, from, to)){
-            std.debug.print("Enpassant detected setting the flag at position {?}\n",.{self.en_passant});
+            if(showMsg)
+                std.debug.print("Enpassant detected setting the flag at position {?}\n",.{self.en_passant});
             return; // we return early so enpassant isn't removed
         }
 
         else if(self.capture_enpassant and piece == .pawn and self.en_passant != null and to == self.en_passant ){
             if(captureEnpassant(self, piece, color, from, to)){
-                std.debug.print("captured enpassant\n",.{});
+                if(showMsg)
+                    std.debug.print("captured enpassant\n",.{});
             }else{
-                std.debug.print("failed to capture",.{});
+                if(showMsg)
+                    std.debug.print("failed to capture enpassant\n",.{});
             }
         }
 

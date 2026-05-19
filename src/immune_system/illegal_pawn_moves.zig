@@ -3,26 +3,26 @@ const std = @import("std");
 
 test "White pawn can move two when legal"{
     var b = root.Board{};
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 8, 24,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 9, 25,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 10, 26,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 11, 27,true));    
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 12, 28,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 13, 29,true));    
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 14, 30,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .white, 15, 31,true));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 8, 24,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 9, 25,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 10, 26,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 11, 27,false));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 12, 28,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 13, 29,false));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 14, 30,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .white, 15, 31,false));    
 }
 
 test "Black can pawn move two when legal"{
     var b = root.Board{};
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 48, 32,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 49, 33,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 50, 34,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 51, 35,true));    
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 52, 36,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 53, 37,true));    
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 54, 38,true)); 
-    try std.testing.expect(root.isLegalPawnMove(&b, .black, 55, 39,true));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 48, 32,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 49, 33,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 50, 34,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 51, 35,false));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 52, 36,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 53, 37,false));    
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 54, 38,false)); 
+    try std.testing.expect(root.isLegalPawnMove(&b, .black, 55, 39,false));    
 }
 
 test "White pawn can't move two if pieces is blocking its path"{
@@ -124,7 +124,6 @@ test "White pawn can legally capture and can't illegally capture"{
     //root.printAsciiBaord(b.getAsciiBoard());
 
     // white pawns trying to capture right illegally
-    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 24, 33, true));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 25, 34, false));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 26, 35, false));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 27, 36, false));
@@ -133,7 +132,6 @@ test "White pawn can legally capture and can't illegally capture"{
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 30, 39, false));
 
     // white pawns trying to capture left illegally
-    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 25, 32, true));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 26, 33, false));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 27, 34, false));
     try std.testing.expect(!root.isLegalPawnMove(&b, .white, 28, 35, false));
@@ -192,42 +190,42 @@ test "Black pawn can capture legally and can't illegally capture"{
 test "White pawn can cpature enpassant"{
     // white pawns trying to capture left enpassant legally
     var b = root.Board{.wp_bb = 730144440320}; // White pawns starting on b4,d4,f4, and h4                                                                
-    try b.makeMove(.pawn, .black, 48, 32);
+    try b.makeMove(.pawn, .black, 48, 32,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 33, 40, false));
-    try b.makeMove(.pawn, .black, 50, 34);
+    try b.makeMove(.pawn, .black, 50, 34,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 35, 42, false));
-    try b.makeMove(.pawn, .black, 52, 36);
+    try b.makeMove(.pawn, .black, 52, 36,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 37, 44, false));
-    try b.makeMove(.pawn, .black, 54, 38);
+    try b.makeMove(.pawn, .black, 54, 38,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 39, 46, false));
 
     b = root.Board{.wp_bb = 365072220160};                                                                 
-    try b.makeMove(.pawn, .black, 49, 33);
+    try b.makeMove(.pawn, .black, 49, 33,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 34, 41, false));
-    try b.makeMove(.pawn, .black, 51, 35);
+    try b.makeMove(.pawn, .black, 51, 35,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 36, 43, false));
-    try b.makeMove(.pawn, .black, 53, 37);
+    try b.makeMove(.pawn, .black, 53, 37,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 38, 45, false));
-    try b.makeMove(.pawn, .black, 55, 39);
+    try b.makeMove(.pawn, .black, 55, 39,false);
 
     // white pawns trying to capture right enpassant legally
     b = root.Board{.wp_bb = 730144440320};                                                                
-    try b.makeMove(.pawn, .black, 48, 32);
-    try b.makeMove(.pawn, .black, 50, 34);
+    try b.makeMove(.pawn, .black, 48, 32,false);
+    try b.makeMove(.pawn, .black, 50, 34,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 33, 42, false));
-    try b.makeMove(.pawn, .black, 52, 36);
+    try b.makeMove(.pawn, .black, 52, 36,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 35, 44, false));
-    try b.makeMove(.pawn, .black, 54, 38);
+    try b.makeMove(.pawn, .black, 54, 38,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 37, 46, false));
 
     b = root.Board{.wp_bb = 365072220160};                                                                
-    try b.makeMove(.pawn, .black, 49, 33);
+    try b.makeMove(.pawn, .black, 49, 33,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 32, 41, false));
-    try b.makeMove(.pawn, .black, 51, 35);
+    try b.makeMove(.pawn, .black, 51, 35,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 34, 43, false));
-    try b.makeMove(.pawn, .black, 53, 37);
+    try b.makeMove(.pawn, .black, 53, 37,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 36, 45, false));
-    try b.makeMove(.pawn, .black, 55, 39);
+    try b.makeMove(.pawn, .black, 55, 39,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .white, 38, 47, false));
 
 }
@@ -235,46 +233,66 @@ test "White pawn can cpature enpassant"{
 test "Black pawn can cpature enpassant"{
     // white pawns trying to capture left enpassant legally
     var b = root.Board{.bp_bb = 2852126720}; // black pawns starting on b4, d4, f4, and h4                                                                
-    root.printAsciiBaord(b.getAsciiBoard());
-    try b.makeMove(.pawn, .white, 8, 24);
-    try b.makeMove(.pawn, .white, 10, 26);
+    try b.makeMove(.pawn, .white, 8, 24,false);
+    try b.makeMove(.pawn, .white, 10, 26,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 25, 18, false));
-    try b.makeMove(.pawn, .white, 12, 28);
+    try b.makeMove(.pawn, .white, 12, 28,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 27, 20, false));
-    try b.makeMove(.pawn, .white, 14, 30);
+    try b.makeMove(.pawn, .white, 14, 30,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 29, 22, false));
 
     b = root.Board{.bp_bb = 1426063360};    // black pawns starting on a4, c4, e4, and g4                                                                
-    try b.makeMove(.pawn, .white, 9, 25);
+    try b.makeMove(.pawn, .white, 9, 25,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 24, 17, false));
-    try b.makeMove(.pawn, .white, 11, 27);
+    try b.makeMove(.pawn, .white, 11, 27,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 26, 19, false));
-    try b.makeMove(.pawn, .white, 13, 29);
+    try b.makeMove(.pawn, .white, 13, 29,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 28, 21, false));
-    try b.makeMove(.pawn, .white, 15, 31);
+    try b.makeMove(.pawn, .white, 15, 31,false);
 
     // white pawns trying to capture right enpassant legally
     b = root.Board{.bp_bb = 2852126720}; // black pawns starting on b4, d4, f4, and h4                                                                
-    try b.makeMove(.pawn, .white, 8, 24);
+    try b.makeMove(.pawn, .white, 8, 24,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 25, 16, false));
-    try b.makeMove(.pawn, .white, 10, 26);
+    try b.makeMove(.pawn, .white, 10, 26,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 27, 18, false));
-    try b.makeMove(.pawn, .white, 12, 28);
+    try b.makeMove(.pawn, .white, 12, 28,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 29, 20, false));
-    try b.makeMove(.pawn, .white, 14, 30);
+    try b.makeMove(.pawn, .white, 14, 30,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 31, 22, false));
 
     b = root.Board{.bp_bb = 1426063360};    // black pawns starting on a4, c4, e4, and g4                                                                
-    try b.makeMove(.pawn, .white, 9, 25);
+    try b.makeMove(.pawn, .white, 9, 25,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 24, 17, false));
-    try b.makeMove(.pawn, .white, 11, 27);
+    try b.makeMove(.pawn, .white, 11, 27,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 26, 19, false));
-    try b.makeMove(.pawn, .white, 13, 29);
+    try b.makeMove(.pawn, .white, 13, 29,false);
     try std.testing.expect(root.isLegalPawnMove(&b, .black, 28, 21, false));
-    try b.makeMove(.pawn, .white, 15, 31);
-
-
-
+    try b.makeMove(.pawn, .white, 15, 31,false);
    
+}
+
+test "White pawn trying to move two after moving once"{
+    var b = root.Board{.wp_bb = 16711680}; // white pawns starting on the 3rd rank
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 16, 32, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 17, 33, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 18, 34, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 19, 35, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 20, 36, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 21, 37, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 22, 38, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .white, 23, 39, false));
+}
+
+test "Black pawns trying to move two after moving once"{
+    var b = root.Board{.bp_bb = 280375465082880}; // white pawns starting on the 3rd rank
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 40, 24, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 41, 25, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 42, 26, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 43, 27, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 44, 28, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 45, 29, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 46, 30, false));
+    try std.testing.expect(!root.isLegalPawnMove(&b, .black, 47, 31, false));
 }
 
