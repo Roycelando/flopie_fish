@@ -29,6 +29,7 @@ pub const MoveError = board_file.MoveError;
 pub const printU64Bits = board_file.printU64Bits;
 pub const printAllU64BitBoards = board_file.printAllU64BitBoards;
 pub const printAsciiBaord = board_file.printAsciiBoard;
+pub const getOccupancyOfColourU64Bits = board_file.getOccupancyOfColourU64Bits;
 
 // piece.zig functions
 pub const pieceValue = piece_file.pieceValue;

@@ -265,12 +265,12 @@ pub const Board = struct {
 
 };
 
-pub fn getOpponentOccupancyU64Bits(board:Board,colour:Color)u64{
-    if(colour == .white){
-        return board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb; // piece occupancy board of the opposing colour
+pub fn getOccupancyOfColourU64Bits(board:Board,colour:Color, getOpp:bool)u64{
+    if((colour == .white and !getOpp)  or (colour == .black and getOpp)){
+        return (board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb);
     }
 
-    return board.wp_bb | board.wr_bb | board.wn_bb | board.wb_bb | board.wq_bb | board.wk_bb;
+    return (board.bp_bb | board.br_bb | board.bn_bb | board.bb_bb | board.bq_bb | board.bk_bb); 
 }
 
 pub fn printU64Bits(value:u64) void {
