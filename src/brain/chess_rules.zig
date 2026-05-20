@@ -219,7 +219,7 @@ pub fn isPawnMoveLegal(board:*Board, comptime colour:Color, comptime from:u6, co
 pub fn isKnightMoveLegal(board: *Board, comptime colour:Color, comptime from:u6, comptime to:u6,comptime showMsg:bool) bool{
     const delta:i7 = @intCast(@as(i7,to) - @as(i7,from));                                                                   
     const absDelta:i7 = @abs(delta);
-    const allYourPieces:u64 = root.getOccupancyOfColourU64Bits(board, colour,false);
+    const allYourPieces:u64 = root.getOccupancyOfColourU64Bits(board.*, colour,false);
 
     if(absDelta != 6  and absDelta != 10 and absDelta != 15 and absDelta != 17 ){ // check that knight moves in an L shape
         if(showMsg)                                                                          
@@ -229,11 +229,11 @@ pub fn isKnightMoveLegal(board: *Board, comptime colour:Color, comptime from:u6,
 
     if(allYourPieces >> to & 1 == 1 ){
         if(showMsg)
-            std.debug.print("The knight is being blcoked by its ally on square {}\n",.{to});
+            std.debug.print("The knight on square {} is being blocked by its ally on square {}\n",.{from, to});
         return false;
     }
 
-    return false;
+    return true;
  }
 
 
