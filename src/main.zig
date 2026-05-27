@@ -41,8 +41,14 @@ pub fn menu() !u8{
 pub fn main() !void {
 
     const val = 1;
-    
+
     if(val == 1){
+        const b = root.Board{};
+        root.printU64Bits(root.generateRookAttakcBoard(b, 48, .white));
+        return;
+    }
+    
+    if(val == 2){
         var b = root.Board{};
         try b.makeMove(.pawn,.black,51,11,true);
         try b.makeMove(.pawn,.black,53,13,true);
