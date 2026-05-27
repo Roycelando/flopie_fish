@@ -238,3 +238,7 @@ pub fn isKnightMoveLegal(board: *Board, comptime colour:Color, comptime from:u6,
 
 
 
+
+
+
+
