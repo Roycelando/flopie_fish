@@ -32,7 +32,10 @@ pub const Board = struct {
     en_passant:?u6 = null, 
     flag_enpassant:bool = true,
     capture_enpassant:bool = true,
-
+    
+    pub fn initBoardEmpty() Board{
+        return .{.wp_bb = 0, .wr_bb = 0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb=0, .bb_bb = 0, .bk_bb =0,.bq_bb = 0};
+    }
 
     fn initBoardFromU64Array() void{
         return;
@@ -288,7 +291,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
 
     currPosition = from - 8;
 
-    while(currPosition > 0):(currPosition-=8){
+    while(currPosition > 0):(currPosition-|=8){
         const curr:u6 = @intCast(currPosition);
         if((freeSpaces >> curr) & 1 == 1 ){
             const temp:u64 = @as(u64, 1) << curr;
@@ -304,7 +307,6 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
 
     currPosition = from + 1;
     var bounds:u6 = @divFloor(from, 8)*8 + 8;
-    std.debug.print("bounds {}\n",.{bounds});
 
     while(currPosition < bounds):(currPosition+=1){
         const curr:u6 = @intCast(currPosition);
@@ -323,7 +325,6 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
 
     currPosition = from - 1;
     bounds = @divFloor(from, 8)*8;
-    std.debug.print("bounds {}\n",.{bounds});
 
     while(currPosition >= bounds):(currPosition-=1){
         const curr:u6 = @intCast(currPosition);

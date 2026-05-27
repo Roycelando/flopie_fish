@@ -43,8 +43,9 @@ pub fn main() !void {
     const val = 1;
 
     if(val == 1){
-        const b = root.Board{};
-        root.printU64Bits(root.generateRookAttakcBoard(b, 48, .white));
+        var b:Board = .{.bp_bb = 554319216640};
+        root.printAsciiBaord(b.getAsciiBoard());
+        root.printU64Bits(root.generateRookAttakcBoard(b, 36, .white));
         return;
     }
     
