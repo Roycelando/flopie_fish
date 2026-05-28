@@ -38,6 +38,7 @@ pub const pieceValue = piece_file.pieceValue;
 //chess_rules.zig functions
 pub const isLegalPawnMove = chess_rules.isPawnMoveLegal;
 pub const isKnightMoveLegal = chess_rules.isKnightMoveLegal;
+pub const isRookMoveLegal = chess_rules.isRookMoveLegal;
 pub const canPawnMoveTwo = chess_rules.canPawnMoveTwo;
 
 

@@ -231,10 +231,33 @@ pub fn isKnightMoveLegal(board: *Board, comptime colour:Color, comptime from:u6,
         if(showMsg)
             std.debug.print("The knight on square {} is being blocked by its ally on square {}\n",.{from, to});
         return false;
+    }    
+
+    return true;
+ 
+}
+
+pub fn isRookMoveLegal(board: *Board, comptime colour:Color, comptime from:u6, comptime to:u6,comptime showMsg:bool) bool {
+    const rookOccupancy:u64 = if (colour == .white) board.wr_bb else board.br_bb;
+    const rookAttackBoard:u64 = root.generateRookAttakcBoard(board.*, from, colour);
+
+    // check if the rook is on the from square
+    if(rookOccupancy >> from & 1 != 1){
+        if(showMsg){
+            std.debug.print("There is not {} rook on square {}",.{colour,from});
+        }
+        return false;
+    }
+
+    if(rookAttackBoard >> to & 1 != 1){
+        if(showMsg){
+            std.debug.print("[{}][{} -> {}] This move is not valid according to the rook attack board\n",.{colour,from, to});
+        }
+        return false;
     }
 
     return true;
- }
+}
 
 
 

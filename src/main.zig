@@ -43,9 +43,13 @@ pub fn main() !void {
     const val = 1;
 
     if(val == 1){
-        var b:Board = .{.bp_bb = 554319216640};
+        var b:Board = .{.bp_bb = 554319216640, .wr_bb = 68719476736};
         root.printAsciiBaord(b.getAsciiBoard());
+        std.debug.print("\n",.{});
         root.printU64Bits(root.generateRookAttakcBoard(b, 36, .white));
+        if(root.isRookMoveLegal(&b, .white, 36, 20, true)){
+            std.debug.print("The rook move is legal\n",.{});
+        }
         return;
     }
     
