@@ -34,7 +34,7 @@ pub const Board = struct {
     capture_enpassant:bool = true,
     
     pub fn initBoardEmpty() Board{
-        return .{.wp_bb = 0, .wr_bb = 0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb=0, .bb_bb = 0, .bk_bb =0,.bq_bb = 0};
+        return .{.wp_bb = 0, .wr_bb = 0, .wn_bb =0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb = 0, .bn_bb =0 ,.bb_bb = 0, .bk_bb =0,.bq_bb = 0};
     }
 
     fn initBoardFromU64Array() void{
@@ -270,7 +270,7 @@ pub const Board = struct {
 
 pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
     var attackBoard:u64 = 0;
-    var currPosition:u7 = from + 8;
+    var currPosition:u7 = from +| 8;
     const freeSpaces = ~board.getCopyOfAllPieceOccupancy();
     const oppBoard = root.getOccupancyOfColourU64Bits(board, color, true);
 
@@ -289,7 +289,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
         }
     }
 
-    currPosition = from - 8;
+    currPosition = from -| 8;
 
     while(currPosition > 0):(currPosition-|=8){
         const curr:u6 = @intCast(currPosition);
@@ -305,8 +305,9 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
         }
     }
 
-    currPosition = from + 1;
-    var bounds:u6 = @divFloor(from, 8)*8 + 8;
+    currPosition = from +| 1;
+    var bounds:u6 = @divFloor(from, 8)*8 +| 8;
+
 
     while(currPosition < bounds):(currPosition+=1){
         const curr:u6 = @intCast(currPosition);
@@ -323,7 +324,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
     }
 
 
-    currPosition = from - 1;
+    currPosition = from -| 1;
     bounds = @divFloor(from, 8)*8;
 
     while(currPosition >= bounds):(currPosition-=1){

@@ -1,6 +1,7 @@
 
 test {
-    _ = @import("illegal_pawn_moves.zig");
-    _ = @import("illegal_knight_moves.zig");
+    _ = @import("testing_pawn_moves.zig");
+    _ = @import("testing_knight_moves.zig");
+    _ = @import("testing_rook_moves.zig");
 
 }
