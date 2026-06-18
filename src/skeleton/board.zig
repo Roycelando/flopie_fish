@@ -291,7 +291,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
 
     currPosition = from -| 8;
 
-    while(currPosition > 0):(currPosition-|=8){
+    while(currPosition >= 0):(currPosition-|=8){
         const curr:u6 = @intCast(currPosition);
         if((freeSpaces >> curr) & 1 == 1 ){
             const temp:u64 = @as(u64, 1) << curr;

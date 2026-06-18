@@ -32,25 +32,62 @@ test "white rook moves on an empty board"{
 test "black rook moves on an empty board"{
     var board:root.Board = root.Board.initBoardEmpty();
     board.br_bb = 9295429630892703873; 
-    root.printAsciiBaord(board.getAsciiBoard());
+    //root.printAsciiBaord(board.getAsciiBoard());
 
     var expectedAttackBoard:u64 =  282578800148862;
     var actualAttackBoard:u64 =  root.generateRookAttakcBoard(board, 0,.black);
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
-    root.printU64Bits(actualAttackBoard);
+   // root.printU64Bits(actualAttackBoard);
 
     expectedAttackBoard = 36170086419038334;
     actualAttackBoard = root.generateRookAttakcBoard(board, 7,.black);
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
-    root.printU64Bits(actualAttackBoard);
+    //root.printU64Bits(actualAttackBoard);
 
     expectedAttackBoard = 9079539427579068672; 
     actualAttackBoard = root.generateRookAttakcBoard(board, 56,.black);
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
-      root.printU64Bits(actualAttackBoard);
+    //  root.printU64Bits(actualAttackBoard);
 
     expectedAttackBoard = 9115426935197958144; 
     actualAttackBoard = root.generateRookAttakcBoard(board, 63,.black);
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+   // root.printU64Bits(actualAttackBoard);
+}
+
+test "white rook can capture black rooks"{
+    var board:root.Board = root.Board.initBoardEmpty();
+    board.br_bb = 72057594037928064;
+    board.wr_bb = 1;
+    //root.printAsciiBaord(board.getAsciiBoard());
+
+    var expectedAttackBoard:u64 = 72340172838076926;
+    var actualAttackBoard:u64 = root.generateRookAttakcBoard(board, 0,.white);
     root.printU64Bits(actualAttackBoard);
+    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+
+    board.wr_bb = 9223372036854775808;
+    expectedAttackBoard = 9187484529235886208;
+    actualAttackBoard = root.generateRookAttakcBoard(board, 63,.white);
+    root.printU64Bits(actualAttackBoard);
+   // root.printAsciiBaord(board.getAsciiBoard());
+ 
+
+    board.br_bb =9223372036854775809;
+    board.wr_bb = 128;
+    expectedAttackBoard = 9259542123273814143;
+    actualAttackBoard = root.generateRookAttakcBoard(board, 7,.white);
+    root.printU64Bits(actualAttackBoard);
+    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+
+    board.wr_bb = 72057594037927936;
+    root.printAsciiBaord(board.getAsciiBoard());
+    expectedAttackBoard = 18302911464433844481;
+    actualAttackBoard = root.generateRookAttakcBoard(board, 56,.white);
+    root.printU64Bits(actualAttackBoard);
+    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+
+
+
+
 }
