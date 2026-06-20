@@ -27,14 +27,14 @@ test "white rook moves on an empty board"{
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
     root.printU64Bits(actualAttackBoard);
 
-    board.br_bb = 0;
+    board = root.Board.initBoardEmpty();
     board.wn_bb = 576460752320200704;
     board.wr_bb = 134217728;
-    root.printAsciiBaord(board.getAsciiBoard());
-    expectedAttackBoard = 2260630501853192;
+    expectedAttackBoard = 2260634394167304;
     actualAttackBoard = root.generateRookAttakcBoard(board,27,.white);
-    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+    root.printAsciiBaord(board.getAsciiBoard());
     root.printU64Bits(actualAttackBoard);
+    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
 }
 
 test "black rook moves on an empty board"{

@@ -270,7 +270,7 @@ pub const Board = struct {
 
 pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
     var attackBoard:u64 = 0;
-    var currPosition:u7 = from +| 8;
+    var currPosition:i8 = @as(i8,from) + 8;
     const freeSpaces = ~board.getCopyOfAllPieceOccupancy();
     const oppBoard = root.getOccupancyOfColourU64Bits(board, color, true);
 
@@ -289,13 +289,15 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
         }
     }
 
-    currPosition = from -| 8;
+    currPosition = @as(i8,from) - 8;
 
-    while(currPosition >= 0):(currPosition-|=8){
+    while(currPosition >= 0):(currPosition-=8){
+        std.debug.print("currPosition {}\n",.{currPosition});
         const curr:u6 = @intCast(currPosition);
         if((freeSpaces >> curr) & 1 == 1 ){
             const temp:u64 = @as(u64, 1) << curr;
             attackBoard |= temp;
+            
         }else{
             if((oppBoard >> curr & 1) == 1){ // if opponet piece legal move to take
                 const temp:u64 = @as(u64, 1) << curr;
@@ -305,7 +307,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
         }
     }
 
-    currPosition = from +| 1;
+    currPosition = @as(i8,from) + 1;
     var bounds:u6 = @divFloor(from, 8)*8 +| 8;
 
 
@@ -324,7 +326,7 @@ pub fn generateRookAttakcBoard(board:Board, from:u6, color:Color)u64{
     }
 
 
-    currPosition = from -| 1;
+    currPosition = @as(i8,from) - 1;
     bounds = @divFloor(from, 8)*8;
 
     while(currPosition >= bounds):(currPosition-=1){
