@@ -239,7 +239,7 @@ pub fn isKnightMoveLegal(board: *Board, comptime colour:Color, comptime from:u6,
 
 pub fn isRookMoveLegal(board: *Board, comptime colour:Color, comptime from:u6, comptime to:u6,comptime showMsg:bool) bool {
     const rookOccupancy:u64 = if (colour == .white) board.wr_bb else board.br_bb;
-    const rookAttackBoard:u64 = root.generateRookAttakcBoard(board.*, from, colour);
+    const rookAttackBoard:u64 = root.generateRookAttack(board.*, from, colour);
 
     // check if the rook is on the from square
     if(rookOccupancy >> from & 1 != 1){
