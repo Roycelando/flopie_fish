@@ -40,7 +40,16 @@ pub fn menu() !u8{
 
 pub fn main() !void {
 
-    const val = 1;
+    const val = 0;
+
+    if(val == 0){
+        var board = root.Board.initBoardEmpty();
+        board.wn_bb = 576460752320200704;
+        board.wr_bb = 134217728;
+        root.printAsciiBaord(board.getAsciiBoard());
+        root.printU64Bits(root.generateRookAttakcBoard(board, 27, .white));
+        return;
+    }
 
     if(val == 1){
         var b:Board = .{.bp_bb = 554319216640, .wr_bb = 68719476736};

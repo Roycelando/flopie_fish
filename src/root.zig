@@ -30,7 +30,7 @@ pub const printU64Bits = board_file.printU64Bits;
 pub const printAllU64BitBoards = board_file.printAllU64BitBoards;
 pub const printAsciiBaord = board_file.printAsciiBoard;
 pub const getOccupancyOfColourU64Bits = board_file.getOccupancyOfColourU64Bits;
-pub const generateRookAttakcBoard = board_file.generateRookAttakcBoard;
+pub const generateRookAttakcBoard = board_file.generateRookAttackBoard;
 
 // piece.zig functions
 pub const pieceValue = piece_file.pieceValue;
