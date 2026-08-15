@@ -22,6 +22,12 @@ Flopie Fish is a chess engine written from scratch in Zig using a 12-bitboard re
 
 ---
 
+## Current status
+
+Move generation is underway. Board representation and move generation for **pawns** (including the double push and en passant), **knights**, and **rooks** are complete, each covered by unit tests that check generated attack boards against hand-verified expected boards. Sliding-piece attacks for bishops and queens are next, followed by king moves and the game loop.
+
+---
+
 ## Project structure
 
 ```
@@ -55,19 +61,30 @@ main → body → brain → nerves → skeleton
 ## Roadmap
 
 - [x] Project structure & CLI menu
-- [ ] Board representation (12 bitboards)
-- [ ] Attack & move generation
+- [x] Board representation (12 bitboards)
+- [x] Move generation — pawns (incl. double push & en passant), knights, rooks (unit-tested)
+- [ ] Move generation — bishops, queens (sliding-piece attacks)
+- [ ] Move generation — king, plus castling and promotion
 - [ ] Human vs human game loop
+- [ ] Perft validation
 - [ ] Evaluation function
 - [ ] Alpha-beta search
 - [ ] UCI protocol
 
 ---
 
+## Testing
+
+Move generation is verified with unit tests in `immune_system/`. Each test sets up a known position and asserts that the generated attack board for a piece matches a hand-verified expected bitboard. Pawns, knights, and rooks are covered so far; tests are added alongside each new piece.
+
+Perft (full-tree node counting against known-correct totals) is planned once all pieces are generating moves — it catches edge cases that per-position unit tests can miss.
+
+---
+
 ## Getting started
 
 ```bash
-git clone https://github.com/you/flopie_fish
+git clone https://github.com/Roycelando/flopie_fish
 cd flopie_fish
 zig build run
 ```
