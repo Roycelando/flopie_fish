@@ -39,10 +39,14 @@ pub fn menu() !u8{
 }
 
 pub fn main() !void {
-
     const val = 0;
+    if(val==0){
+        const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        root.Board.initBoardFEN(fen);
+        return;
+    }
 
-    if(val == 0){
+    if(val == 1){
         var board = root.Board.initBoardEmpty();
         board.wn_bb = 576460752320200704;
         board.wr_bb = 134217728;
@@ -51,7 +55,7 @@ pub fn main() !void {
         return;
     }
 
-    if(val == 1){
+    if(val == 2){
         var b:Board = .{.bp_bb = 554319216640, .wr_bb = 68719476736};
         root.printAsciiBaord(b.getAsciiBoard());
         std.debug.print("\n",.{});
@@ -62,7 +66,7 @@ pub fn main() !void {
         return;
     }
     
-    if(val == 2){
+    if(val == 3){
         var b = root.Board{};
         try b.makeMove(.pawn,.black,51,11,true);
         try b.makeMove(.pawn,.black,53,13,true);

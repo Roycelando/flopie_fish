@@ -37,6 +37,31 @@ pub const Board = struct {
         return .{.wp_bb = 0, .wr_bb = 0, .wn_bb =0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb = 0, .bn_bb =0 ,.bb_bb = 0, .bk_bb =0,.bq_bb = 0};
     }
 
+    pub fn initBoardFEN(fen: []const u8) void{
+        const delimiter = ' ';
+        var splitValues = std.mem.splitScalar(u8, fen,delimiter);
+        var count:usize = 0;
+
+        while(splitValues.next())|v| :(count+=1){ // 5 sections to the fen
+            if(count>=5){
+                break;
+            }
+            std.debug.print("{s}\n",.{v});
+            if (count == 0){ // the piece placement
+                const pieces = v;
+                for(pieces)|c|{
+                    if (c == '/'){
+                        std.debug.print("\n",.{});
+                        continue;
+                    }
+                    std.debug.print("{c} ",.{c});
+                }
+                std.debug.print("\n",.{});
+            }
+        }
+        return;
+    }
+
     fn initBoardFromU64Array() void{
         return;
     }
@@ -80,39 +105,39 @@ pub const Board = struct {
         switch (piece) {
                     Piece.pawn=>{
                         if(color == .white){
-                            return 'p';
+                            return 'P';
                         }
-                        return 'P';
+                        return 'p';
                     },
                     Piece.rook=>{
                         if(color == .white){
-                            return 'r';
-                        }
                             return 'R';
+                        }
+                            return 'r';
                     },
                     Piece.knight=>{
                         if(color == .white){
-                            return 'n';
-                        }
                             return 'N';
+                        }
+                            return 'n';
                     },
                     Piece.bishop=>{
                         if(color == .white){
-                            return 'b';
-                        }
                             return 'B';
+                        }
+                            return 'b';
                     },
                     Piece.queen=>{
                         if(color == .white){
-                            return 'q';
-                        }
                             return 'Q';
+                        }
+                            return 'q';
                     },
                     Piece.king=>{
                         if(color == .white){
-                            return 'k';
-                        }
                             return 'K';
+                        }
+                            return 'k';
                     },
                 }
 
