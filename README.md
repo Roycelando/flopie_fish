@@ -55,7 +55,7 @@ main → body → brain → nerves → skeleton
 ## Roadmap
 
 - [x] Project structure & CLI menu
-- [ ] Board representation (12 bitboards)
+- [x] Board representation (12 bitboards)
 - [ ] Attack & move generation
 - [ ] Human vs human game loop
 - [ ] Evaluation function
