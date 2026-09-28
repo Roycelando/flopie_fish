@@ -42,7 +42,7 @@ pub fn main() !void {
     const val = 0;
     if(val==0){
         const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        root.Board.initBoardFEN(fen);
+        try root.Board.initBoardFEN(fen);
         return;
     }
 

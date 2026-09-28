@@ -6,11 +6,21 @@ const Piece = root.Piece;
 
 //TODO: Please create test cases to ensure the board is working correctly
 //TODO: Make getArryOfU64Boards private later
+// Fix the initFen trying to radify adding the different int types
+
+const ValidPieceChar = [_]u8{'p','r','n','b','q','k'}; // vaid chars to represent a chess piece 
+const ValidFenChar = [_]u8{'p','r','n','b','q','k','0','1','2','3','4','5','6','7','8','/'}; // valid chars to be in a fen string
 
 
 pub const MoveError = error{
     IlegalMove,
     InvalidSquare,
+};
+
+pub const ParseError = error{
+    InvalidFenChar,
+    InvalidPieceChar,
+    InvalidFenString
 };
 
 pub const Board = struct {
@@ -37,26 +47,58 @@ pub const Board = struct {
         return .{.wp_bb = 0, .wr_bb = 0, .wn_bb =0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb = 0, .bn_bb =0 ,.bb_bb = 0, .bk_bb =0,.bq_bb = 0};
     }
 
-    pub fn initBoardFEN(fen: []const u8) void{
+    pub fn initBoardFEN(fen: []const u8) ParseError!void{
         const delimiter = ' ';
         var splitValues = std.mem.splitScalar(u8, fen,delimiter);
         var count:usize = 0;
+        var board:Board = initBoardEmpty();
+        const boardPtr:*Board = &board;
 
-        while(splitValues.next())|v| :(count+=1){ // 5 sections to the fen
+        while(splitValues.next())|section| :(count+=1){ // 5 sections to the fen
             if(count>=5){
                 break;
             }
-            std.debug.print("{s}\n",.{v});
+            std.debug.print("{s}\n",.{section});
             if (count == 0){ // the piece placement
-                const pieces = v;
-                for(pieces)|c|{
+                var currRow:u7 = 7;
+                var colCount:u7 = 0;                             
+                var piecePosition:u6 = 56;
+
+                for(section)|c|{
+                    if(!isValidFenChar(c)){
+                        return ParseError.InvalidFenChar;
+                    }
+                    if(colCount>8){
+                        return ParseError.InvalidFenChar;
+                    }
                     if (c == '/'){
+                        colCount =0;
+                        currRow -=1;
+                        piecePosition = @intCast(currRow * 8);
                         std.debug.print("\n",.{});
                         continue;
                     }
-                    std.debug.print("{c} ",.{c});
+                    if(c >= '0' and c <= '8'){
+                        colCount+= @intCast(c-'0');
+                        continue;
+                    }
+                    piecePosition =  piecePosition +| @intCast(colCount);
+                    const piece_color = try getPieceFromChar(c);
+                    const piece:Piece = piece_color[0];
+                    const color:Color = piece_color[1];
+
+                    const currPieceBoard:*u64 = getBoardFromPiece(boardPtr, piece, color);
+                    const tempPieceBoard:u64 = @as(u64,1) << @intCast(piecePosition);
+                    currPieceBoard.* |= tempPieceBoard;
+
+                    
+                    std.debug.print("piece:{}, color:{} position {}\n",.{piece,color,piecePosition});
+                   
+                    colCount+=1;
                 }
                 std.debug.print("\n",.{});
+
+                printAsciiBoard(board.getAsciiBoard());
             }
         }
         return;
@@ -142,6 +184,58 @@ pub const Board = struct {
                 }
 
     }
+
+    fn getPieceFromChar(char:u8) ParseError!struct {Piece, Color}{
+        if(char == 'P'){
+            return .{Piece.pawn,Color.white};
+        }if(char == 'p'){
+            return .{Piece.pawn,Color.black};
+        }if(char == 'R'){
+            return .{Piece.rook,Color.white};
+        }if(char == 'r'){
+            return .{Piece.rook,Color.black};
+        }if(char == 'N'){
+            return .{Piece.knight,Color.white};
+        }if(char == 'n'){
+            return .{Piece.knight,Color.black};
+        }if(char == 'B'){
+            return .{Piece.bishop,Color.white};
+        }if(char == 'b'){
+            return .{Piece.bishop,Color.black};
+        }if(char == 'Q'){
+            return .{Piece.queen,Color.white};
+        }if(char == 'q'){
+            return .{Piece.queen,Color.black};
+        }if(char == 'K'){
+            return .{Piece.king,Color.white};
+        }if(char == 'k'){
+            return .{Piece.king,Color.black};
+        }
+        
+        return ParseError.InvalidPieceChar;
+    }
+
+    fn isValidPieceChar(char:u8) bool{
+        const l_char:u8 = std.ascii.toLower(char);
+        for(ValidPieceChar)|c|{
+            if(l_char == c){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    fn isValidFenChar(char:u8) bool{
+        const l_char:u8 = std.ascii.toLower(char);
+        for(ValidFenChar)|c|{
+            if(l_char == c){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 
     fn getBoardFromPiece(self:*Board,piece:Piece,color:Color) *u64{
         switch (piece) {
