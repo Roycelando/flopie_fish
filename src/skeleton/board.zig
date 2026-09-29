@@ -405,7 +405,7 @@ pub fn generateRookAttackBoard(board:Board, from:u6, color:Color)u64{
     const freeSpaces = ~board.getCopyOfAllPieceOccupancy();
     const oppBoard = root.getOccupancyOfColourU64Bits(board, color, true);
 
-    // send a ray upwards if free space append 1 to the attack board
+    // send a ray upwards,downwards,left, and right. If free space or oppoenent piece append 1 to the attack board
     while(currPosition < 64):(currPosition+=8){
        // std.debug.print("[Up] currPosition {}\n",.{currPosition});
         const curr:u6 = @intCast(currPosition);
