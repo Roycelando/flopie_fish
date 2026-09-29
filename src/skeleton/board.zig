@@ -47,7 +47,9 @@ pub const Board = struct {
         return .{.wp_bb = 0, .wr_bb = 0, .wn_bb =0, .wb_bb = 0, .wk_bb = 0,.wq_bb = 0,.bp_bb = 0, .br_bb = 0, .bn_bb =0 ,.bb_bb = 0, .bk_bb =0,.bq_bb = 0};
     }
 
-    pub fn initBoardFEN(fen: []const u8) ParseError!void{
+    pub fn initBoardFEN(fen: []const u8) ParseError!Board{
+        // TODO: Code the other 4 sections of fen. For now we can at least parse the text and make the board
+        // TODO: Still need to parse: enpassant, who plays next, half moves, full moves 
         const delimiter = ' ';
         var splitValues = std.mem.splitScalar(u8, fen,delimiter);
         var count:usize = 0;
@@ -58,10 +60,9 @@ pub const Board = struct {
             if(count>=5){
                 break;
             }
-            std.debug.print("{s}\n",.{section});
             if (count == 0){ // the piece placement
                 var currRow:u7 = 7;
-                var colCount:u7 = 0;                             
+                var colCount:u4 = 0;                             
                 var piecePosition:u6 = 56;
 
                 for(section)|c|{
@@ -75,33 +76,46 @@ pub const Board = struct {
                         colCount =0;
                         currRow -=1;
                         piecePosition = @intCast(currRow * 8);
-                        std.debug.print("\n",.{});
+                        //std.debug.print("\n",.{});
                         continue;
                     }
                     if(c >= '0' and c <= '8'){
                         colCount+= @intCast(c-'0');
                         continue;
                     }
-                    piecePosition =  piecePosition +| @intCast(colCount);
+                    const currPosition = piecePosition + @as(u6, @intCast(colCount));
                     const piece_color = try getPieceFromChar(c);
                     const piece:Piece = piece_color[0];
                     const color:Color = piece_color[1];
 
                     const currPieceBoard:*u64 = getBoardFromPiece(boardPtr, piece, color);
-                    const tempPieceBoard:u64 = @as(u64,1) << @intCast(piecePosition);
+                    const tempPieceBoard:u64 = @as(u64,1) << @intCast(currPosition);
                     currPieceBoard.* |= tempPieceBoard;
 
                     
-                    std.debug.print("piece:{}, color:{} position {}\n",.{piece,color,piecePosition});
+                    //std.debug.print("piece:{}, color:{} colCount: {} position {} piece pos {}\n",.{piece,color,colCount,piecePosition,currPosition});
                    
                     colCount+=1;
                 }
-                std.debug.print("\n",.{});
+                //std.debug.print("\n",.{});
 
                 printAsciiBoard(board.getAsciiBoard());
             }
+            else if(count == 1){ // Active Color: parse who turn it is to move next
+                std.debug.print("Active Color Parse\n",.{});
+            }
+            else if (count == 2){// Castling rights: indicates which way white and black can castle
+                std.debug.print("Castling Rights Parse\n",.{});
+            }
+            else if (count == 3){// half movese: number of moves for white and black before a capture or pawn advance
+                std.debug.print("Half Moves Parse\n",.{});
+            }
+            else if (count == 4){// full moves: number of black moves 
+                std.debug.print("Full Moves Parse\n",.{});
+            }
+            std.debug.print("{s}\n",.{section});
         }
-        return;
+        return board;
     }
 
     fn initBoardFromU64Array() void{
