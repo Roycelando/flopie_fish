@@ -44,8 +44,10 @@ pub fn main() !void {
         //const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         //const fen = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2";
         //const fen = "rnbqkbnr/ppp1pp2/7p/3p2B1/3P4/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4";
-        const fen = "8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b -- 99 50";
-        _ = try root.Board.initBoardFEN(fen);
+        //const fen = "8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b -- 99 50";
+        const fen = "3P4/8/8/8/8/8/1P1r1P2/3P4 w - - 0 1";
+        var board = try root.Board.initBoardFEN(fen);
+        root.printAsciiBaord(board.getAsciiBoard());
         return;
     }
 

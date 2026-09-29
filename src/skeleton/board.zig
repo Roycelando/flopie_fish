@@ -98,22 +98,20 @@ pub const Board = struct {
                     colCount+=1;
                 }
                 //std.debug.print("\n",.{});
-
-                printAsciiBoard(board.getAsciiBoard());
             }
             else if(count == 1){ // Active Color: parse who turn it is to move next
-                std.debug.print("Active Color Parse\n",.{});
+                //std.debug.print("Active Color Parse\n",.{});
             }
             else if (count == 2){// Castling rights: indicates which way white and black can castle
-                std.debug.print("Castling Rights Parse\n",.{});
+                //std.debug.print("Castling Rights Parse\n",.{});
             }
             else if (count == 3){// half movese: number of moves for white and black before a capture or pawn advance
-                std.debug.print("Half Moves Parse\n",.{});
+                //std.debug.print("Half Moves Parse\n",.{});
             }
             else if (count == 4){// full moves: number of black moves 
-                std.debug.print("Full Moves Parse\n",.{});
+                //std.debug.print("Full Moves Parse\n",.{});
             }
-            std.debug.print("{s}\n",.{section});
+            //std.debug.print("{s}\n",.{section});
         }
         return board;
     }

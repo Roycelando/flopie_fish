@@ -5,7 +5,7 @@ test "white rook can't capture white pieces"{
     var board:root.Board = root.Board.initBoardEmpty();
 
     board.wr_bb = 9295429630892703873; 
-    // root.printAsciiBaord(board.getAsciiBoard());
+    root.printAsciiBaord(board.getAsciiBoard());
 
     var expectedAttackBoard:u64 =  282578800148862;
     var actualAttackBoard:u64 =  root.generateRookAttakcBoard(board, 0,.white);
@@ -138,7 +138,6 @@ test "white rooks can capture black pieces"{
   
 }
 
-
 test "black rooks can capture white pieces"{
     std.debug.print("Black rooks attack\n",.{});
     var board:root.Board = root.Board.initBoardEmpty();
@@ -184,6 +183,14 @@ test "black rooks can capture white pieces"{
     board.wn_bb = 576460754450907136;
     expectedAttackBoard = 578721386714368008;
     actualAttackBoard = root.generateRookAttakcBoard(board,27,.black);
+    root.printAsciiBaord(board.getAsciiBoard());
+    root.printU64Bits(actualAttackBoard);
+    try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
+    
+    const fen = "3P4/8/8/8/8/8/1P1r1P2/3P4 w - - 0 1";
+    board = try root.Board.initBoardFEN(fen);
+    expectedAttackBoard = 578721382704625160;
+    actualAttackBoard = root.generateRookAttakcBoard(board, 11, .black);
     root.printAsciiBaord(board.getAsciiBoard());
     root.printU64Bits(actualAttackBoard);
     try std.testing.expectEqual(expectedAttackBoard, actualAttackBoard);
